@@ -60,130 +60,246 @@
     </footer>
   </div>
 
-  <script>
-  // === Banco de preguntas (completo) ===
-  const QUESTIONS = [
-    {id:1,type:'mcq',q:'1. Son los fármacos utilizados para el tratamiento de enfermedades herpéticas:',
-      opts:[
-        {t:'Aciclovir, valaciclovir, cidofovir, famciclovir, penciclovir, ganciclovir, valganciclovir, foscarnet, fomivirsen, docosanol, idoxuridina, trifluridina', correct:true},
-        {t:'Aciclovir, valaciclovir, famciclovir, ganciclovir, valganciclovir, docosanol, trifluridina, albendazol, nitazoxanida, salbutamol, tetraciclina, amiodarona'},
-        {t:'Penciclovir, docosanol, idoxuridina, trifluridina, amantadina, rimantadina, linezolida, pentamidina, tricabendazol, somatropina, dapsona, daptomicina'},
-        {t:'Ganciclovir, valganciclovir, cidofovir, foscarnet, oseltamivir, zanamivir, carvedilol, doxiciclina, ciprofloxacina, sulfixozasol, neuramidasa'}]},
-    {id:2,type:'mcq',q:'2. ¿Cuál es el mecanismo de acción del aciclovir?',
-      opts:[
-        {t:'Inhibe la síntesis del ADN viral al bloquear la ADN polimerasa viral', correct:true},
-        {t:'Bloqueo de la neuraminidasa viral en la membrana polipeptidica de fase replicativa'},
-        {t:'Inhibición de la proteína M2 (canal iónico) en el nucleo de el virion'},
-        {t:'Inhibición de la transcriptasa inversa'}]},
-    {id:3,type:'mcq',q:'3. Dosis del aciclovir y valaciclovir en infecciones genitales iniciales',
-      opts:[
-        {t:'Aciclovir 200 mg 5/día x 7–10 días; Valaciclovir 1000 mg c/12 h x 7–10 días', correct:true},
-        {t:'Aciclovir 400 mg c/12h o 400 mg 3/día h x 5 días; Valaciclovir 500 mg c/12 h x 5 días'},
-        {t:'Aciclovir 800 mg c8h por 14 días; Valaciclovir 1500 mg una vez al día por 10 días'},
-        {t:'Aciclovir 200 mg c/12h por 7 días; Valaciclovir 500 mg una vez/día por 7 días'}]},
-    {id:4,type:'mcq',q:'4. Escriba los efectos adversos del aciclovir y valaciclovir por separado',
-      opts:[
-        {t:'Aciclovir: irritación tópica; náuseas/diarrea/cefalea VO; nefro/neurotoxicidad IV. Valaciclovir: náuseas, cefalea, diarrea, nefrotoxicidad y síntomas SNC; rara trombocitopenia en inmunocomprometidos', correct:true},
-        {t:'Aciclovir: hepatotoxicidad severa. Valaciclovir: visión borrosa persistente'},
-        {t:'Aciclovir: somnolencia marcada. Valaciclovir: hipoglucemia'},
-        {t:'Aciclovir: anemia hemolítica. Valaciclovir: hipocalcemia sintomática'}]},
-    {id:5,type:'mcq',q:'5. ¿Cuáles son los usos terapéuticos y efectos adversos del cidofovir?',
-      opts:[
-        {t:'Usos: retinitis CMV (VIH), HSV resistente, adenovirus en TR, molusco en VIH; gel: verrugas anogenitales/NIC. EA: nefrotoxicidad (principal), ardor/prurito, potencial cancerígeno/infertilidad, Cat. C; interacc. con aminoglucósidos, pentamidina IV, anfotericina B, foscarnet, AINEs/contraste', correct:true},
-        {t:'Usos: influenza A/B. EA: diarrea leve'},
-        {t:'Usos: profilaxis de varicela. EA: hipoglucemia'},
-        {t:'Usos: mononucleosis. EA: rabdomiólisis'}]},
-    {id:6,type:'mcq',q:'6. Dosis de Famciclovir en pacientes con un primer episodio de herpes genital',
-      opts:[
-        {t:'250 mg tres veces al día durante 7–10 días', correct:true},
-        {t:'200 mg cada 8 h por 5 días'},
-        {t:'400 mg una vez al día por 10 días'},
-        {t:'500 mg cada 12 h por 5 días'}]},
-    {id:7,type:'mcq',q:'7. Escriba los efectos secundarios del ganciclovir',
-      opts:[
-        {t:'Mielosupresión (limitante), neutropenia; flebitis de infusión; azotemia, anemia, erupción, fiebre, alteración hepática, náuseas/vómitos, eosinofilia', correct:true},
-        {t:'Hipercalcemia, tos seca, fotofobia'},
-        {t:'Somnolencia, hipoglucemia, hiponatremia'},
-        {t:'Bradicardia, broncoespasmo, urticaria leve'}]},
-    {id:8,type:'mcq',q:'8. ¿Cuáles son los usos terapéuticos del foscarnet?',
-      opts:[
-        {t:'Retinitis CMV; profilaxis viremia CMV en trasplante de médula; ↓riesgo sarcoma de Kaposi; HSV/VZV resistentes; utilidad tópica en crónicas resistentes', correct:true},
-        {t:'Influenza A y B no complicada'},
-        {t:'Profilaxis HBV en portadores'},
-        {t:'Mononucleosis aguda'}]},
-    {id:9,type:'mcq',q:'9. Escriba los efectos secundarios del foscarnet',
-      opts:[
-        {t:'Nefrotoxicidad; hipoCa sintomática; alteraciones de Ca/fosfato, hipoMg/hipoK; cefalea, temblor, irritabilidad, convulsiones, alucinosis; irritación/ulceración tópica; GI por VO', correct:true},
-        {t:'Anemia hemolítica, hipotiroidismo, visión borrosa'},
-        {t:'Hipertensión, hiperglucemia, coagulopatía'},
-        {t:'Exantema fijo, lupus inducido'}]},
-    {id:10,type:'mcq',q:'10. Escriba todos los fármacos útiles en el tratamiento de las infecciones por citomegalovirus',
-      opts:[
-        {t:'Cidofovir, fomivirsen, ganciclovir, trifluridina, interferones, foscarnet, valganciclovir', correct:true},
-        {t:'Aciclovir, oseltamivir, rimantadina, zanamivir, peramivir'},
-        {t:'Zidovudina, efavirenz, raltegravir, lamivudina'},
-        {t:'Ribavirina, remdesivir, favipiravir'}]},
-    {id:11,type:'mcq',q:'11. ¿Qué fármacos menciona el texto que forman parte del tratamiento de la influenza?',
-      opts:[
-        {t:'Amantadina, rimantadina, oseltamivir, zanamivir, peramivir, interferones', correct:true},
-        {t:'Aciclovir, valaciclovir, famciclovir'},
-        {t:'Ganciclovir, valganciclovir, foscarnet'},
-        {t:'Docosanol, idoxuridina, trifluridina'}]},
-    {id:12,type:'mcq',q:'12. Escriba el mecanismo de acción de la amantadina y rimantadina',
-      opts:[
-        {t:'Interfieren con la proteína M2 del virus influenza A (canal iónico), afectando el desnudamiento; también acción tardía sobre ensamblaje/hemaglutinina en algunas cepas', correct:true},
-        {t:'Inhiben la neuraminidasa'},
-        {t:'Bloquean la fusión mediada por hemaglutinina'},
-        {t:'Inhiben la ADN polimerasa viral'}]},
-    {id:13,type:'mcq',q:'13. ¿Cuáles son los usos terapéuticos de la amantadina y rimantadina?',
-      opts:[
-        {t:'Prevención y tratamiento de influenza A susceptible; control de brotes nosocomiales; profilaxis estacional (70–90% protección)', correct:true},
-        {t:'Tratamiento de influenza B únicamente'},
-        {t:'Tratamiento de hepatitis C crónica'},
-        {t:'Profilaxis de varicela en inmunocompetentes'}]},
-    {id:14,type:'mcq',q:'14. Escriba los efectos secundarios de la amantadina y rimantadina',
-      opts:[
-        {t:'CNS y GI dosis-dependientes: nerviosismo, aturdimiento, dificultad para concentrarse, insomnio, pérdida de apetito, náuseas; reacciones graves: delirio, alucinosis, convulsiones, coma; arritmias', correct:true},
-        {t:'Hipoglucemia grave y pancreatitis'},
-        {t:'Mielosupresión y neutropenia severa'},
-        {t:'Fotosensibilidad y alopecia'}]},
-    {id:15,type:'mcq',q:'15. Escriba el mecanismo de acción del oseltamivir',
-      opts:[
-        {t:'Inhibidor de neuraminidasa: agrega viriones en superficie celular y reduce propagación en tracto respiratorio', correct:true},
-        {t:'Bloqueo de la proteína M2 (canal iónico)'},
-        {t:'Inhibición de la ADN polimerasa viral'},
-        {t:'Estimulación de interferón endógeno'}]},
-    {id:16,type:'mcq',q:'16. ¿Cuáles son los usos terapéuticos del oseltamivir?',
-      opts:[
-        {t:'Tratamiento y prevención (profilaxis estacional) de influenza A y B', correct:true},
-        {t:'Tratamiento de herpes simple mucocutáneo'},
-        {t:'Profilaxis de CMV en trasplante de médula'},
-        {t:'Tratamiento de papilomatosis laríngea'}]},
-    {id:17,type:'mcq',q:'17. ¿Cuáles son los usos terapéuticos y que vía se utiliza para administrar el zanamivir?',
-      opts:[
-        {t:'Tratamiento/previsión de influenza A y B; vía inhalatoria (IV en casos graves/resistentes, emergencia, en algunos países)', correct:true},
-        {t:'Tratamiento de hepatitis B; vía oral'},
-        {t:'Tratamiento de varicela; vía tópica'},
-        {t:'Tratamiento de CMV; vía subcutánea'}]},
-    {id:18,type:'mcq',q:'18. ¿Qué efectos secundarios produce el zanamivir?',
-      opts:[
-        {t:'Sibilancias, broncoespasmo, deterioro agudo de función pulmonar; desenlaces fatales en asma/EPOC', correct:true},
-        {t:'Cefalea leve y somnolencia'},
-        {t:'Hipertensión y bradicardia'},
-        {t:'Fotosensibilidad y xerostomía'}]},
-    {id:19,type:'mcq',q:'19.  ¿Cuál es el efecto adverso más común del peramivir?',
-      opts:[
-        {t:'Diarrea (>2%)', correct:true},
-        {t:'Náuseas con vómitos recurrentes'},
-        {t:'Rash maculopapular'},
-        {t:'Visión borrosa persistente'}]},
-    {id:20,type:'mcq',q:'20. En que tipo de infecciones virales se utilizan los interferones',
-      opts:[
-        {t:'Condiloma acuminado; HCV/HBV crónicos; sarcoma de Kaposi (VIH); otras malignidades; esclerosis múltiple; HSV/herpes zóster; CMV en TR; papilomatosis laríngea; trombocitopenia por VIH; infecciones respiratorias', correct:true},
-        {t:'Hepatitis A aguda y varicela exclusivamente'},
-        {t:'Mononucleosis infecciosa no complicada'},
-        {t:'Profilaxis universal de dengue'}]}
-  ];
+<script>
+const QUESTIONS = [
+  // 4
+  {
+    id:4,
+    type:'mcq',
+    q:'4. EA de Aciclovir y Valaciclovir',
+    opts:[
+      'Aciclovir: irritación, GI, nefro/neurotoxicidad. Valaciclovir: GI, cefalea, SNC, trombocitopenia.',
+      'Aciclovir: GI, cefalea, rash leve. Valaciclovir: GI, mareo, SNC, alteración hepática.',
+      'Aciclovir: cefalea, prurito, fatiga. Valaciclovir: GI, insomnio, erupción cutánea, cefalea.',
+      'Aciclovir: GI, visión borrosa, fiebre. Valaciclovir: GI, cefalea, leve hepatotoxicidad, náuseas.'
+    ],
+    correct:0
+  },
+
+  // 5
+  {
+    id:5,
+    type:'mcq',
+    q:'5. Cidofovir – Usos y EA',
+    opts:[
+      'Usos: CMV, HSV resistente, verrugas/NIC. EA: nefrotoxicidad, irritación, potencial cancerígeno.',
+      'Usos: HSV, CMV, adenovirus. EA: GI, fiebre, nefrotoxicidad leve.',
+      'Usos: CMV, HSV ocular, varicela. EA: prurito, GI, alteración hepática.',
+      'Usos: CMV, HSV resistente, verrugas. EA: cefalea, nefrotoxicidad, mareo.'
+    ],
+    correct:0
+  },
+
+  // 6
+  {
+    id:6,
+    type:'mcq',
+    q:'6. Famciclovir – Dosis',
+    opts:[
+      '250 mg cada 8 h por 7–10 días',
+      '200 mg cada 6 h por 10 días',
+      '400 mg cada 12 h por 5 días',
+      '500 mg cada 8 h por 7 días'
+    ],
+    correct:0
+  },
+
+  // 7
+  {
+    id:7,
+    type:'mcq',
+    q:'7. Ganciclovir – Efectos adversos',
+    opts:[
+      'EA: mielosupresión, anemia, GI, leve hepato.',
+      'EA: leucopenia, cefalea, GI, leve rash.',
+      'EA: anemia, GI, fiebre, leve nefro.',
+      'EA: trombocitopenia, GI, cefalea, leve hepato.'
+    ],
+    correct:0
+  },
+
+  // 8
+  {
+    id:8,
+    type:'mcq',
+    q:'8. Foscarnet – Usos terapéuticos',
+    opts:[
+      'Usos: CMV, HSV/VZV resistentes, Kaposi VIH.',
+      'Usos: CMV, HSV ocular, adenovirus, EBV.',
+      'Usos: HSV, influenza A, VZV, mononucleosis.',
+      'Usos: CMV, HSV, hepatitis, varicela.'
+    ],
+    correct:0
+  },
+
+  // 9
+  {
+    id:9,
+    type:'mcq',
+    q:'9. Foscarnet – Efectos adversos',
+    opts:[
+      'EA: nefrotoxicidad, hipoCa, hipoMg/K, cefalea, convulsiones.',
+      'EA: nefrotoxicidad leve, rash, insomnio, cefalea.',
+      'EA: GI, hipocalcemia, fiebre, parestesias.',
+      'EA: hipocalcemia, GI leves, mareo, prurito.'
+    ],
+    correct:0
+  },
+
+  // 10
+  {
+    id:10,
+    type:'mcq',
+    q:'10. CMV – Fármacos útiles',
+    opts:[
+      'Cidofovir, Fomivirsen, Ganciclovir, Valganciclovir, Foscarnet, Interferones.',
+      'Ganciclovir, Valganciclovir, Cidofovir, Ribavirina, Interferones, Remdesivir.',
+      'Foscarnet, Cidofovir, Ganciclovir, Zanamivir, Valaciclovir, Interferones.',
+      'Valganciclovir, Fomivirsen, Oseltamivir, Ribavirina, Cidofovir, Foscarnet.'
+    ],
+    correct:0
+  },
+
+  // 11
+  {
+    id:11,
+    type:'mcq',
+    q:'11. Influenza – Fármacos',
+    opts:[
+      'Amantadina, Rimantadina, Oseltamivir, Zanamivir, Peramivir, Interferones.',
+      'Rimantadina, Oseltamivir, Zanamivir, Foscarnet, Cidofovir, Interferones.',
+      'Oseltamivir, Zanamivir, Peramivir, Amantadina, Foscarnet, Ribavirina.',
+      'Amantadina, Rimantadina, Cidofovir, Famciclovir, Peramivir, Interferones.'
+    ],
+    correct:0
+  },
+
+  // 12
+  {
+    id:12,
+    type:'mcq',
+    q:'12. Amantadina / Rimantadina – Mecanismo de acción',
+    opts:[
+      'Bloquean M2 → impiden desnudamiento viral.',
+      'Inhiben neuraminidasa → evitan liberación viral.',
+      'Inhiben polimerasa → reducen replicación viral.',
+      'Inhiben fusión → limitan entrada celular.'
+    ],
+    correct:0
+  },
+
+  // 13
+  {
+    id:13,
+    type:'mcq',
+    q:'13. Amantadina / Rimantadina – Usos terapéuticos',
+    opts:[
+      'Previenen y tratan influenza A; brotes hospitalarios.',
+      'Previenen influenza B; profilaxis varicela.',
+      'Tratan influenza A/B; prevención HSV.',
+      'Previenen hepatitis A; control varicela.'
+    ],
+    correct:0
+  },
+
+  // 14
+  {
+    id:14,
+    type:'mcq',
+    q:'14. Amantadina / Rimantadina – Efectos adversos',
+    opts:[
+      'EA: nerviosismo, insomnio, GI, delirio, convulsiones, arritmias.',
+      'EA: cefalea, insomnio, GI leves, somnolencia, visión borrosa.',
+      'EA: GI, mareo, ansiedad, náuseas, rash leve.',
+      'EA: fatiga, alteración hepática, cefalea, vértigo, hipoNa.'
+    ],
+    correct:0
+  },
+
+  // 15
+  {
+    id:15,
+    type:'mcq',
+    q:'15. Oseltamivir – Mecanismo de acción',
+    opts:[
+      'Inhibe neuraminidasa → bloquea diseminación viral.',
+      'Bloquea canal M2 → impide ensamblaje viral.',
+      'Inhibe polimerasa → detiene replicación viral.',
+      'Interfiere adhesión → limita infección viral.'
+    ],
+    correct:0
+  },
+
+  // 16
+  {
+    id:16,
+    type:'mcq',
+    q:'16. Oseltamivir – Usos',
+    opts:[
+      'Tratamiento y profilaxis de influenza A y B.',
+      'Tratamiento influenza A y prevención RSV.',
+      'Profilaxis influenza B y varicela.',
+      'Prevención de hepatitis y resfriado viral.'
+    ],
+    correct:0
+  },
+
+  // 17
+  {
+    id:17,
+    type:'mcq',
+    q:'17. Zanamivir – Usos y vía',
+    opts:[
+      'Influenza A/B; profilaxis familiar; vía inhalatoria.',
+      'Influenza B/CMV; tratamiento hospital; vía IV.',
+      'Influenza A/VZV; prevención; vía oral.',
+      'Influenza A/B; profilaxis nasal; vía tópica.'
+    ],
+    correct:0
+  },
+
+  // 18
+  {
+    id:18,
+    type:'mcq',
+    q:'18. Zanamivir – Efectos adversos',
+    opts:[
+      'EA: broncoespasmo, sibilancias, disnea leve.',
+      'EA: tos seca, GI leves, cefalea leve.',
+      'EA: fiebre, mareo, disnea leve.',
+      'EA: tos leve, rinorrea, GI leves.'
+    ],
+    correct:0
+  },
+
+  // 19
+  {
+    id:19,
+    type:'mcq',
+    q:'19. Peramivir – Efectos adversos',
+    opts:[
+      'EA: diarrea leve (>2%).',
+      'EA: GI leves, cefalea, insomnio, rash.',
+      'EA: náuseas, vómitos, mareo, fiebre.',
+      'EA: GI, artralgia, prurito, visión borrosa.'
+    ],
+    correct:0
+  },
+
+  // 20
+  {
+    id:20,
+    type:'mcq',
+    q:'20. Interferones – Usos terapéuticos',
+    opts:[
+      'HBV/HCV, condilomas, Kaposi, EM, HSV.',
+      'HBV, HSV, influenza, EBV, varicela.',
+      'CMV, dengue, VIH, HPV, influenza.',
+      'HCV, HBV, HPV, mono, sarampión.'
+    ],
+    correct:0
+  }
+];
 
   // === Utilidades ===
   function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
