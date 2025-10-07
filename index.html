@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cuestionario Interactivo #1 – Fármacos Antivirales (v2)</title>
+  <meta name="color-scheme" content="dark light">
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#22d3ee;--bad:#ef4444;--good:#22c55e}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--ink)}
+    .wrap{max-width:960px;margin:32px auto;padding:24px}
+    header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px}
+    h1{font-size:clamp(20px,3vw,28px);margin:0;letter-spacing:.2px}
+    .meta{color:var(--muted);font-size:14px}
+    .card{background:rgba(17,24,39,.8);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;margin:14px 0}
+    .q{display:grid;gap:12px}
+    .q-title{font-weight:700}
+    .opts{display:grid;gap:8px;margin-top:6px}
+    .opt{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:10px 12px;border-radius:12px;cursor:pointer}
+    .opt input{margin-top:3px}
+    .opt span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .fillin{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.2);color:var(--ink)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px}
+    button{background:var(--accent);border:none;color:#00232c;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    button.secondary{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.15)}
+    .result{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35)}
+    .bad{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
+    .badge{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:var(--muted)}
+    .explain{color:var(--muted);font-size:13px;margin-top:8px}
+    .correct{outline:2px solid var(--good)}
+    .incorrect{outline:2px solid var(--bad)}
+    footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+    noscript{display:block;margin-top:12px;color:#fecaca;background:#7f1d1d;padding:10px;border-radius:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Cuestionario Interactivo #1 – Fármacos Antivirales</h1>
+        <div class="meta">PRACTICA</div>
+      </div>
+      <div class="badge">20 preguntas</div>
+    </header>
+
+    <noscript>Este cuestionario requiere JavaScript habilitado.</noscript>
+    <div id="quiz" aria-live="polite"></div>
+
+    <div class="actions" role="group" aria-label="acciones">
+      <button id="grade">Calificar</button>
+      <button class="secondary" id="reset">Reiniciar</button>
+      <button class="secondary" id="reveal">Mostrar respuestas</button>
+    </div>
+
+    <div id="summary" aria-live="polite"></div>
+
+    <footer>
+      <p>Tip: La Dra. enfatiza <strong>dosis + duración</strong>. Revisa con atención 3, 6, 16 y 19.</p>
+    </footer>
+  </div>
+
+  <script>
+  // === Banco de preguntas (completo) ===
+  const QUESTIONS = [
+    {id:1,type:'mcq',q:'1. Son los fármacos utilizados para el tratamiento de enfermedades herpéticas:',
+      opts:[
+        {t:'Aciclovir, valaciclovir, cidofovir, famciclovir, penciclovir, ganciclovir, valganciclovir, foscarnet, fomivirsen, docosanol, idoxuridina, trifluridina', correct:true},
+        {t:'Aciclovir, valaciclovir, famciclovir, ganciclovir, valganciclovir, docosanol, trifluridina, albendazol, nitazoxanida, salbutamol, tetraciclina, amiodarona'},
+        {t:'Penciclovir, docosanol, idoxuridina, trifluridina, amantadina, rimantadina, linezolida, pentamidina, tricabendazol, somatropina, dapsona, daptomicina'},
+        {t:'Ganciclovir, valganciclovir, cidofovir, foscarnet, oseltamivir, zanamivir, carvedilol, doxiciclina, ciprofloxacina, sulfixozasol, neuramidasa'}]},
+    {id:2,type:'mcq',q:'2. ¿Cuál es el mecanismo de acción del aciclovir?',
+      opts:[
+        {t:'Inhibe la síntesis del ADN viral al bloquear la ADN polimerasa viral', correct:true},
+        {t:'Bloqueo de la neuraminidasa viral en la membrana polipeptidica de fase replicativa'},
+        {t:'Inhibición de la proteína M2 (canal iónico) en el nucleo de el virion'},
+        {t:'Inhibición de la transcriptasa inversa'}]},
+    {id:3,type:'mcq',q:'3. Dosis del aciclovir y valaciclovir en infecciones genitales iniciales',
+      opts:[
+        {t:'Aciclovir 200 mg 5/día o 400 mg 3/día x 7–10 días; Valaciclovir 1000 mg c/12 h x 7–10 días', correct:true},
+        {t:'Aciclovir 400 mg c/12h o 400 mg 3/día h x 5 días; Valaciclovir 500 mg c/12 h x 5 días'},
+        {t:'Aciclovir 800 mg c8h por 14 días; Valaciclovir 1500 mg una vez al día por 10 días'},
+        {t:'Aciclovir 200 mg c/12h por 7 días; Valaciclovir 500 mg una vez/día por 7 días'}]},
+    {id:4,type:'mcq',q:'4. Escriba los efectos adversos del aciclovir y valaciclovir por separado',
+      opts:[
+        {t:'Aciclovir: irritación tópica; náuseas/diarrea/cefalea VO; nefro/neurotoxicidad IV. Valaciclovir: náuseas, cefalea, diarrea, nefrotoxicidad y síntomas SNC; rara trombocitopenia en inmunocomprometidos', correct:true},
+        {t:'Aciclovir: hepatotoxicidad severa. Valaciclovir: visión borrosa persistente'},
+        {t:'Aciclovir: somnolencia marcada. Valaciclovir: hipoglucemia'},
+        {t:'Aciclovir: anemia hemolítica. Valaciclovir: hipocalcemia sintomática'}]},
+    {id:5,type:'mcq',q:'5. ¿Cuáles son los usos terapéuticos y efectos adversos del cidofovir?',
+      opts:[
+        {t:'Usos: retinitis CMV (VIH), HSV resistente, adenovirus en TR, molusco en VIH; gel: verrugas anogenitales/NIC. EA: nefrotoxicidad (principal), ardor/prurito, potencial cancerígeno/infertilidad, Cat. C; interacc. con aminoglucósidos, pentamidina IV, anfotericina B, foscarnet, AINEs/contraste', correct:true},
+        {t:'Usos: influenza A/B. EA: diarrea leve'},
+        {t:'Usos: profilaxis de varicela. EA: hipoglucemia'},
+        {t:'Usos: mononucleosis. EA: rabdomiólisis'}]},
+    {id:6,type:'mcq',q:'6. Dosis de Famciclovir en pacientes con un primer episodio de herpes genital',
+      opts:[
+        {t:'250 mg tres veces al día durante 7–10 días', correct:true},
+        {t:'200 mg cada 8 h por 5 días'},
+        {t:'400 mg una vez al día por 10 días'},
+        {t:'500 mg cada 12 h por 5 días'}]},
+    {id:7,type:'mcq',q:'7. Escriba los efectos secundarios del ganciclovir',
+      opts:[
+        {t:'Mielosupresión (limitante), neutropenia; flebitis de infusión; azotemia, anemia, erupción, fiebre, alteración hepática, náuseas/vómitos, eosinofilia', correct:true},
+        {t:'Hipercalcemia, tos seca, fotofobia'},
+        {t:'Somnolencia, hipoglucemia, hiponatremia'},
+        {t:'Bradicardia, broncoespasmo, urticaria leve'}]},
+    {id:8,type:'mcq',q:'8. ¿Cuáles son los usos terapéuticos del foscarnet?',
+      opts:[
+        {t:'Retinitis CMV; profilaxis viremia CMV en trasplante de médula; ↓riesgo sarcoma de Kaposi; HSV/VZV resistentes; utilidad tópica en crónicas resistentes', correct:true},
+        {t:'Influenza A y B no complicada'},
+        {t:'Profilaxis HBV en portadores'},
+        {t:'Mononucleosis aguda'}]},
+    {id:9,type:'mcq',q:'9. Escriba los efectos secundarios del foscarnet',
+      opts:[
+        {t:'Nefrotoxicidad; hipoCa sintomática; alteraciones de Ca/fosfato, hipoMg/hipoK; cefalea, temblor, irritabilidad, convulsiones, alucinosis; irritación/ulceración tópica; GI por VO', correct:true},
+        {t:'Anemia hemolítica, hipotiroidismo, visión borrosa'},
+        {t:'Hipertensión, hiperglucemia, coagulopatía'},
+        {t:'Exantema fijo, lupus inducido'}]},
+    {id:10,type:'mcq',q:'10. Escriba todos los fármacos útiles en el tratamiento de las infecciones por citomegalovirus',
+      opts:[
+        {t:'Cidofovir, fomivirsen, ganciclovir, trifluridina, interferones, foscarnet, valganciclovir', correct:true},
+        {t:'Aciclovir, oseltamivir, rimantadina, zanamivir, peramivir'},
+        {t:'Zidovudina, efavirenz, raltegravir, lamivudina'},
+        {t:'Ribavirina, remdesivir, favipiravir'}]},
+    {id:11,type:'mcq',q:'11. ¿Qué fármacos menciona el texto que forman parte del tratamiento de la influenza?',
+      opts:[
+        {t:'Amantadina, rimantadina, oseltamivir, zanamivir, peramivir, interferones', correct:true},
+        {t:'Aciclovir, valaciclovir, famciclovir'},
+        {t:'Ganciclovir, valganciclovir, foscarnet'},
+        {t:'Docosanol, idoxuridina, trifluridina'}]},
+    {id:12,type:'mcq',q:'12. Escriba el mecanismo de acción de la amantadina y rimantadina',
+      opts:[
+        {t:'Interfieren con la proteína M2 del virus influenza A (canal iónico), afectando el desnudamiento; también acción tardía sobre ensamblaje/hemaglutinina en algunas cepas', correct:true},
+        {t:'Inhiben la neuraminidasa'},
+        {t:'Bloquean la fusión mediada por hemaglutinina'},
+        {t:'Inhiben la ADN polimerasa viral'}]},
+    {id:13,type:'mcq',q:'13. ¿Cuáles son los usos terapéuticos de la amantadina y rimantadina?',
+      opts:[
+        {t:'Prevención y tratamiento de influenza A susceptible; control de brotes nosocomiales; profilaxis estacional (70–90% protección)', correct:true},
+        {t:'Tratamiento de influenza B únicamente'},
+        {t:'Tratamiento de hepatitis C crónica'},
+        {t:'Profilaxis de varicela en inmunocompetentes'}]},
+    {id:14,type:'mcq',q:'14. Escriba los efectos secundarios de la amantadina y rimantadina',
+      opts:[
+        {t:'CNS y GI dosis-dependientes: nerviosismo, aturdimiento, dificultad para concentrarse, insomnio, pérdida de apetito, náuseas; reacciones graves: delirio, alucinosis, convulsiones, coma; arritmias', correct:true},
+        {t:'Hipoglucemia grave y pancreatitis'},
+        {t:'Mielosupresión y neutropenia severa'},
+        {t:'Fotosensibilidad y alopecia'}]},
+    {id:15,type:'mcq',q:'15. Escriba el mecanismo de acción del oseltamivir',
+      opts:[
+        {t:'Inhibidor de neuraminidasa: agrega viriones en superficie celular y reduce propagación en tracto respiratorio', correct:true},
+        {t:'Bloqueo de la proteína M2 (canal iónico)'},
+        {t:'Inhibición de la ADN polimerasa viral'},
+        {t:'Estimulación de interferón endógeno'}]},
+    {id:16,type:'mcq',q:'16. ¿Cuáles son los usos terapéuticos del oseltamivir?',
+      opts:[
+        {t:'Tratamiento y prevención (profilaxis estacional) de influenza A y B', correct:true},
+        {t:'Tratamiento de herpes simple mucocutáneo'},
+        {t:'Profilaxis de CMV en trasplante de médula'},
+        {t:'Tratamiento de papilomatosis laríngea'}]},
+    {id:17,type:'mcq',q:'17. ¿Cuáles son los usos terapéuticos y que vía se utiliza para administrar el zanamivir?',
+      opts:[
+        {t:'Tratamiento/previsión de influenza A y B; vía inhalatoria (IV en casos graves/resistentes, emergencia, en algunos países)', correct:true},
+        {t:'Tratamiento de hepatitis B; vía oral'},
+        {t:'Tratamiento de varicela; vía tópica'},
+        {t:'Tratamiento de CMV; vía subcutánea'}]},
+    {id:18,type:'mcq',q:'18. ¿Qué efectos secundarios produce el zanamivir?',
+      opts:[
+        {t:'Sibilancias, broncoespasmo, deterioro agudo de función pulmonar; desenlaces fatales en asma/EPOC', correct:true},
+        {t:'Cefalea leve y somnolencia'},
+        {t:'Hipertensión y bradicardia'},
+        {t:'Fotosensibilidad y xerostomía'}]},
+    {id:19,type:'mcq',q:'19.  ¿Cuál es el efecto adverso más común del peramivir?',
+      opts:[
+        {t:'Diarrea (>2%)', correct:true},
+        {t:'Náuseas con vómitos recurrentes'},
+        {t:'Rash maculopapular'},
+        {t:'Visión borrosa persistente'}]},
+    {id:20,type:'mcq',q:'20. En que tipo de infecciones virales se utilizan los interferones',
+      opts:[
+        {t:'Condiloma acuminado; HCV/HBV crónicos; sarcoma de Kaposi (VIH); otras malignidades; esclerosis múltiple; HSV/herpes zóster; CMV en TR; papilomatosis laríngea; trombocitopenia por VIH; infecciones respiratorias', correct:true},
+        {t:'Hepatitis A aguda y varicela exclusivamente'},
+        {t:'Mononucleosis infecciosa no complicada'},
+        {t:'Profilaxis universal de dengue'}]}
+  ];
+
+  // === Utilidades ===
+  function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  const ABC=['a','b','c','d','e','f'];
+  function normalize(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,' ')}
+
+  const quizEl=document.getElementById('quiz');
+
+  function render(){
+    quizEl.innerHTML='';
+    QUESTIONS.forEach((q)=>{
+      const card=document.createElement('div');
+      card.className='card q';
+      const title=document.createElement('div');
+      title.className='q-title';
+      title.textContent=q.q;
+      card.appendChild(title);
+
+      if(q.type==='mcq'){
+        const optsEl=document.createElement('div');
+        optsEl.className='opts';
+        const mixed=shuffle(q.opts);
+        mixed.forEach((opt,idx)=>{
+          const label=document.createElement('label');
+          label.className='opt';
+          const input=document.createElement('input');
+          input.type='radio';
+          input.name='q'+q.id;
+          if(opt.correct) input.dataset.correct='true';
+          label.appendChild(input);
+          const span=document.createElement('span');
+          span.textContent=`${ABC[idx]}) ${opt.t}`;
+          span.title=opt.t; // ver completo al pasar el mouse
+          label.appendChild(span);
+          optsEl.appendChild(label);
+        });
+        card.appendChild(optsEl);
+      } else if(q.type==='vf'){
+        const opts=document.createElement('div');
+        opts.className='opts';
+        ['Verdadero','Falso'].forEach((txt,idx)=>{
+          const label=document.createElement('label');
+          label.className='opt';
+          const input=document.createElement('input');
+          input.type='radio';
+          input.name='q'+q.id;
+          if((q.correct||'').toLowerCase()===txt.toLowerCase()) input.dataset.correct='true';
+          label.appendChild(input);
+          const span=document.createElement('span');
+          span.textContent=`${ABC[idx]}) ${txt}`;
+          label.appendChild(span);
+          opts.appendChild(label);
+        });
+        card.appendChild(opts);
+      } else if(q.type==='fill'){
+        const inp=document.createElement('input');
+        inp.className='fillin';
+        inp.placeholder='Escribe la(s) palabra(s) exacta(s)';
+        inp.name='q'+q.id;
+        card.appendChild(inp);
+      }
+      quizEl.appendChild(card);
+    });
+  }
+
+  render();
+
+  // === Calificar ===
+  document.getElementById('grade').addEventListener('click',()=>{
+    const cards=[...document.querySelectorAll('.card')];
+    let correct=0;
+    cards.forEach((card,idx)=>{
+      const q=QUESTIONS[idx];
+      card.querySelectorAll('.opt, .fillin').forEach(el=>el.classList.remove('correct','incorrect'));
+      const prev=card.querySelector('.result'); if(prev) prev.remove();
+      let ok=false;
+      if(q.type==='mcq' || q.type==='vf'){
+        const chosen=card.querySelector('input:checked');
+        const labels=card.querySelectorAll('.opt');
+        labels.forEach(l=>{const inp=l.querySelector('input'); if(inp.dataset.correct==='true') l.classList.add('correct');});
+        if(chosen){ if(chosen.dataset.correct==='true') ok=true; else chosen.closest('.opt').classList.add('incorrect'); }
+      } else if(q.type==='fill'){
+        const inp=card.querySelector('input.fillin');
+        const ans=normalize(inp.value);
+        const target=Array.isArray(q.correct)? q.correct.map(normalize): [normalize(q.correct)];
+        if(target.some(t=>t===ans)) { ok=true; inp.classList.add('correct'); } else { inp.classList.add('incorrect'); }
+      }
+      if(ok) correct++;
+      const res=document.createElement('div');
+      res.className='result ' + (ok? '' : 'bad');
+      res.textContent= ok? '✔ Correcto' : '✘ Incorrecto';
+      if(q.explain){ const ex=document.createElement('div'); ex.className='explain'; ex.textContent=q.explain; res.appendChild(ex); }
+      card.appendChild(res);
+    });
+    const sum=document.getElementById('summary');
+    sum.innerHTML=`<div class="card"><strong>Puntuación:</strong> ${correct} / ${QUESTIONS.length} (${Math.round(correct/QUESTIONS.length*100)}%)</div>`;
+  });
+
+  // Reiniciar
+  document.getElementById('reset').addEventListener('click',()=>{
+    render();
+    document.getElementById('summary').innerHTML='';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  // Mostrar respuestas (sin calificar)
+  document.getElementById('reveal').addEventListener('click',()=>{
+    const cards=[...document.querySelectorAll('.card')];
+    cards.forEach((card)=>{
+      const correctInput=card.querySelector('input[data-correct=true]');
+      if(correctInput) correctInput.checked=true;
+      card.querySelectorAll('.opt').forEach(l=>{
+        const inp=l.querySelector('input');
+        if(inp.dataset.correct==='true') l.classList.add('correct');
+      });
+    });
+  });
+  </script>
+</body>
+</html>
