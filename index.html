@@ -41,7 +41,7 @@
         <h1>Cuestionario Interactivo #1 – Fármacos Antivirales</h1>
         <div class="meta">PRACTICA</div>
       </div>
-      <div class="badge">20 preguntas</div>
+      <div class="badge" id="badgeCount"></div>
     </header>
 
     <noscript>Este cuestionario requiere JavaScript habilitado.</noscript>
@@ -61,12 +61,30 @@
   </div>
 
 <script>
+// ==== PREGUNTAS (4–20) ====
 const QUESTIONS = [
+    {id:1,type:'mcq',q:'1. Son los fármacos utilizados para el tratamiento de enfermedades herpéticas:',
+      opts:[
+        {t:'Aciclovir, valaciclovir, cidofovir, famciclovir, penciclovir, ganciclovir, valganciclovir, foscarnet, fomivirsen, docosanol, idoxuridina, trifluridina', correct:true},
+        {t:'Aciclovir, valaciclovir, famciclovir, ganciclovir, valganciclovir, docosanol, trifluridina, albendazol, nitazoxanida, salbutamol, tetraciclina, amiodarona'},
+        {t:'Penciclovir, docosanol, idoxuridina, trifluridina, amantadina, rimantadina, linezolida, pentamidina, tricabendazol, somatropina, dapsona, daptomicina'},
+        {t:'Ganciclovir, valganciclovir, cidofovir, foscarnet, oseltamivir, zanamivir, carvedilol, doxiciclina, ciprofloxacina, sulfixozasol, neuramidasa'}]},
+  //2
+    {id:2,type:'mcq',q:'2. ¿Cuál es el mecanismo de acción del aciclovir?',
+      opts:[
+        {t:'Inhibe la síntesis del ADN viral al bloquear la ADN polimerasa viral', correct:true},
+        {t:'Bloqueo de la neuraminidasa viral en la membrana polipeptidica de fase replicativa'},
+        {t:'Inhibición de la proteína M2 (canal iónico) en el nucleo de el virion'},
+        {t:'Inhibición de la transcriptasa inversa'}]},
+  //3
+  {id:3, type:'mcq',q:'3. Dosis del aciclovir y valaciclovir en infecciones genitales iniciales',
+      opts:[
+        {t:'Aciclovir 200 mg 5/día x 7–10 días; Valaciclovir 1000 mg c/12 h x 7–10 días', correct:true},
+        {t:'Aciclovir 400 mg c/12h o 400 mg 3/día x 5 días; Valaciclovir 500 mg c/12 h x 5 días'},
+        {t:'Aciclovir 800 mg c8h por 14 días; Valaciclovir 1500 mg una vez al día por 10 días'},
+        {t:'Aciclovir 200 mg c/12h por 7 días; Valaciclovir 500 mg una vez/día por 7 días'}]},
   // 4
-  {
-    id:4,
-    type:'mcq',
-    q:'4. EA de Aciclovir y Valaciclovir',
+  { id:4, type:'mcq', q:'4. EA de Aciclovir y Valaciclovir',
     opts:[
       'Aciclovir: irritación, GI, nefro/neurotoxicidad. Valaciclovir: GI, cefalea, SNC, trombocitopenia.',
       'Aciclovir: GI, cefalea, rash leve. Valaciclovir: GI, mareo, SNC, alteración hepática.',
@@ -75,12 +93,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 5
-  {
-    id:5,
-    type:'mcq',
-    q:'5. Cidofovir – Usos y EA',
+  { id:5, type:'mcq', q:'5. Cidofovir – Usos y EA',
     opts:[
       'Usos: CMV, HSV resistente, verrugas/NIC. EA: nefrotoxicidad, irritación, potencial cancerígeno.',
       'Usos: HSV, CMV, adenovirus. EA: GI, fiebre, nefrotoxicidad leve.',
@@ -89,12 +103,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 6
-  {
-    id:6,
-    type:'mcq',
-    q:'6. Famciclovir – Dosis',
+  { id:6, type:'mcq', q:'6. Famciclovir – Dosis',
     opts:[
       '250 mg cada 8 h por 7–10 días',
       '200 mg cada 6 h por 10 días',
@@ -103,12 +113,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 7
-  {
-    id:7,
-    type:'mcq',
-    q:'7. Ganciclovir – Efectos adversos',
+  { id:7, type:'mcq', q:'7. Ganciclovir – Efectos adversos',
     opts:[
       'EA: mielosupresión, anemia, GI, leve hepato.',
       'EA: leucopenia, cefalea, GI, leve rash.',
@@ -117,12 +123,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 8
-  {
-    id:8,
-    type:'mcq',
-    q:'8. Foscarnet – Usos terapéuticos',
+  { id:8, type:'mcq', q:'8. Foscarnet – Usos terapéuticos',
     opts:[
       'Usos: CMV, HSV/VZV resistentes, Kaposi VIH.',
       'Usos: CMV, HSV ocular, adenovirus, EBV.',
@@ -131,12 +133,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 9
-  {
-    id:9,
-    type:'mcq',
-    q:'9. Foscarnet – Efectos adversos',
+  { id:9, type:'mcq', q:'9. Foscarnet – Efectos adversos',
     opts:[
       'EA: nefrotoxicidad, hipoCa, hipoMg/K, cefalea, convulsiones.',
       'EA: nefrotoxicidad leve, rash, insomnio, cefalea.',
@@ -145,12 +143,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 10
-  {
-    id:10,
-    type:'mcq',
-    q:'10. CMV – Fármacos útiles',
+  { id:10, type:'mcq', q:'10. CMV – Fármacos útiles',
     opts:[
       'Cidofovir, Fomivirsen, Ganciclovir, Valganciclovir, Foscarnet, Interferones.',
       'Ganciclovir, Valganciclovir, Cidofovir, Ribavirina, Interferones, Remdesivir.',
@@ -159,12 +153,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 11
-  {
-    id:11,
-    type:'mcq',
-    q:'11. Influenza – Fármacos',
+  { id:11, type:'mcq', q:'11. Influenza – Fármacos',
     opts:[
       'Amantadina, Rimantadina, Oseltamivir, Zanamivir, Peramivir, Interferones.',
       'Rimantadina, Oseltamivir, Zanamivir, Foscarnet, Cidofovir, Interferones.',
@@ -173,12 +163,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 12
-  {
-    id:12,
-    type:'mcq',
-    q:'12. Amantadina / Rimantadina – Mecanismo de acción',
+  { id:12, type:'mcq', q:'12. Amantadina / Rimantadina – Mecanismo de acción',
     opts:[
       'Bloquean M2 → impiden desnudamiento viral.',
       'Inhiben neuraminidasa → evitan liberación viral.',
@@ -187,12 +173,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 13
-  {
-    id:13,
-    type:'mcq',
-    q:'13. Amantadina / Rimantadina – Usos terapéuticos',
+  { id:13, type:'mcq', q:'13. Amantadina / Rimantadina – Usos terapéuticos',
     opts:[
       'Previenen y tratan influenza A; brotes hospitalarios.',
       'Previenen influenza B; profilaxis varicela.',
@@ -201,12 +183,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 14
-  {
-    id:14,
-    type:'mcq',
-    q:'14. Amantadina / Rimantadina – Efectos adversos',
+  { id:14, type:'mcq', q:'14. Amantadina / Rimantadina – Efectos adversos',
     opts:[
       'EA: nerviosismo, insomnio, GI, delirio, convulsiones, arritmias.',
       'EA: cefalea, insomnio, GI leves, somnolencia, visión borrosa.',
@@ -215,12 +193,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 15
-  {
-    id:15,
-    type:'mcq',
-    q:'15. Oseltamivir – Mecanismo de acción',
+  { id:15, type:'mcq', q:'15. Oseltamivir – Mecanismo de acción',
     opts:[
       'Inhibe neuraminidasa → bloquea diseminación viral.',
       'Bloquea canal M2 → impide ensamblaje viral.',
@@ -229,12 +203,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 16
-  {
-    id:16,
-    type:'mcq',
-    q:'16. Oseltamivir – Usos',
+  { id:16, type:'mcq', q:'16. Oseltamivir – Usos',
     opts:[
       'Tratamiento y profilaxis de influenza A y B.',
       'Tratamiento influenza A y prevención RSV.',
@@ -243,12 +213,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 17
-  {
-    id:17,
-    type:'mcq',
-    q:'17. Zanamivir – Usos y vía',
+  { id:17, type:'mcq', q:'17. Zanamivir – Usos y vía',
     opts:[
       'Influenza A/B; profilaxis familiar; vía inhalatoria.',
       'Influenza B/CMV; tratamiento hospital; vía IV.',
@@ -257,12 +223,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 18
-  {
-    id:18,
-    type:'mcq',
-    q:'18. Zanamivir – Efectos adversos',
+  { id:18, type:'mcq', q:'18. Zanamivir – Efectos adversos',
     opts:[
       'EA: broncoespasmo, sibilancias, disnea leve.',
       'EA: tos seca, GI leves, cefalea leve.',
@@ -271,12 +233,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 19
-  {
-    id:19,
-    type:'mcq',
-    q:'19. Peramivir – Efectos adversos',
+  { id:19, type:'mcq', q:'19. Peramivir – Efectos adversos',
     opts:[
       'EA: diarrea leve (>2%).',
       'EA: GI leves, cefalea, insomnio, rash.',
@@ -285,12 +243,8 @@ const QUESTIONS = [
     ],
     correct:0
   },
-
   // 20
-  {
-    id:20,
-    type:'mcq',
-    q:'20. Interferones – Usos terapéuticos',
+  { id:20, type:'mcq', q:'20. Interferones – Usos terapéuticos',
     opts:[
       'HBV/HCV, condilomas, Kaposi, EM, HSV.',
       'HBV, HSV, influenza, EBV, varicela.',
@@ -301,122 +255,138 @@ const QUESTIONS = [
   }
 ];
 
-  // === Utilidades ===
-  function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-  const ABC=['a','b','c','d','e','f'];
-  function normalize(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,' ')}
+// === Utilidades
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const ABC=['a','b','c','d','e','f'];
+function normalize(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,' ')}
 
-  const quizEl=document.getElementById('quiz');
+const quizEl=document.getElementById('quiz');
+const badge=document.getElementById('badgeCount');
+badge.textContent = `${QUESTIONS.length} preguntas`;
 
-  function render(){
-    quizEl.innerHTML='';
-    QUESTIONS.forEach((q)=>{
-      const card=document.createElement('div');
-      card.className='card q';
-      const title=document.createElement('div');
-      title.className='q-title';
-      title.textContent=q.q;
-      card.appendChild(title);
+function render(){
+  quizEl.innerHTML='';
+  QUESTIONS.forEach((q)=>{
+    const card=document.createElement('div');
+    card.className='card q';
+    const title=document.createElement('div');
+    title.className='q-title';
+    title.textContent=q.q;
+    card.appendChild(title);
 
-      if(q.type==='mcq'){
-        const optsEl=document.createElement('div');
-        optsEl.className='opts';
-        const mixed=shuffle(q.opts);
-        mixed.forEach((opt,idx)=>{
-          const label=document.createElement('label');
-          label.className='opt';
-          const input=document.createElement('input');
-          input.type='radio';
-          input.name='q'+q.id;
-          if(opt.correct) input.dataset.correct='true';
-          label.appendChild(input);
-          const span=document.createElement('span');
-          span.textContent=`${ABC[idx]}) ${opt.t}`;
-          span.title=opt.t; // ver completo al pasar el mouse
-          label.appendChild(span);
-          optsEl.appendChild(label);
-        });
-        card.appendChild(optsEl);
-      } else if(q.type==='vf'){
-        const opts=document.createElement('div');
-        opts.className='opts';
-        ['Verdadero','Falso'].forEach((txt,idx)=>{
-          const label=document.createElement('label');
-          label.className='opt';
-          const input=document.createElement('input');
-          input.type='radio';
-          input.name='q'+q.id;
-          if((q.correct||'').toLowerCase()===txt.toLowerCase()) input.dataset.correct='true';
-          label.appendChild(input);
-          const span=document.createElement('span');
-          span.textContent=`${ABC[idx]}) ${txt}`;
-          label.appendChild(span);
-          opts.appendChild(label);
-        });
-        card.appendChild(opts);
-      } else if(q.type==='fill'){
-        const inp=document.createElement('input');
-        inp.className='fillin';
-        inp.placeholder='Escribe la(s) palabra(s) exacta(s)';
-        inp.name='q'+q.id;
-        card.appendChild(inp);
-      }
-      quizEl.appendChild(card);
-    });
-  }
+    if(q.type==='mcq'){
+      const optsEl=document.createElement('div');
+      optsEl.className='opts';
 
-  render();
-
-  // === Calificar ===
-  document.getElementById('grade').addEventListener('click',()=>{
-    const cards=[...document.querySelectorAll('.card')];
-    let correct=0;
-    cards.forEach((card,idx)=>{
-      const q=QUESTIONS[idx];
-      card.querySelectorAll('.opt, .fillin').forEach(el=>el.classList.remove('correct','incorrect'));
-      const prev=card.querySelector('.result'); if(prev) prev.remove();
-      let ok=false;
-      if(q.type==='mcq' || q.type==='vf'){
-        const chosen=card.querySelector('input:checked');
-        const labels=card.querySelectorAll('.opt');
-        labels.forEach(l=>{const inp=l.querySelector('input'); if(inp.dataset.correct==='true') l.classList.add('correct');});
-        if(chosen){ if(chosen.dataset.correct==='true') ok=true; else chosen.closest('.opt').classList.add('incorrect'); }
-      } else if(q.type==='fill'){
-        const inp=card.querySelector('input.fillin');
-        const ans=normalize(inp.value);
-        const target=Array.isArray(q.correct)? q.correct.map(normalize): [normalize(q.correct)];
-        if(target.some(t=>t===ans)) { ok=true; inp.classList.add('correct'); } else { inp.classList.add('incorrect'); }
-      }
-      if(ok) correct++;
-      const res=document.createElement('div');
-      res.className='result ' + (ok? '' : 'bad');
-      res.textContent= ok? '✔ Correcto' : '✘ Incorrecto';
-      if(q.explain){ const ex=document.createElement('div'); ex.className='explain'; ex.textContent=q.explain; res.appendChild(ex); }
-      card.appendChild(res);
-    });
-    const sum=document.getElementById('summary');
-    sum.innerHTML=`<div class="card"><strong>Puntuación:</strong> ${correct} / ${QUESTIONS.length} (${Math.round(correct/QUESTIONS.length*100)}%)</div>`;
-  });
-
-  // Reiniciar
-  document.getElementById('reset').addEventListener('click',()=>{
-    render();
-    document.getElementById('summary').innerHTML='';
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
-
-  // Mostrar respuestas (sin calificar)
-  document.getElementById('reveal').addEventListener('click',()=>{
-    const cards=[...document.querySelectorAll('.card')];
-    cards.forEach((card)=>{
-      const correctInput=card.querySelector('input[data-correct=true]');
-      if(correctInput) correctInput.checked=true;
-      card.querySelectorAll('.opt').forEach(l=>{
-        const inp=l.querySelector('input');
-        if(inp.dataset.correct==='true') l.classList.add('correct');
+      // 👇 Normaliza opciones: soporte para strings u objetos,
+      // y marca cuál es correcta ANTES de mezclar.
+      const normalized = q.opts.map((opt,i)=>{
+        if(typeof opt === 'string'){
+          return { t: opt, correct: i === q.correct };
+        } else {
+          // ya viene como {t, correct}
+          return { t: opt.t, correct: !!opt.correct || i === q.correct };
+        }
       });
+
+      const mixed=shuffle(normalized);
+
+      mixed.forEach((opt,idx)=>{
+        const label=document.createElement('label');
+        label.className='opt';
+        const input=document.createElement('input');
+        input.type='radio';
+        input.name='q'+q.id;
+        if(opt.correct) input.dataset.correct='true';
+        label.appendChild(input);
+        const span=document.createElement('span');
+        span.textContent=`${ABC[idx]}) ${opt.t}`;
+        span.title=opt.t;
+        label.appendChild(span);
+        optsEl.appendChild(label);
+      });
+      card.appendChild(optsEl);
+    }
+    else if(q.type==='vf'){
+      const opts=document.createElement('div');
+      opts.className='opts';
+      ['Verdadero','Falso'].forEach((txt,idx)=>{
+        const label=document.createElement('label');
+        label.className='opt';
+        const input=document.createElement('input');
+        input.type='radio';
+        input.name='q'+q.id;
+        if((q.correct||'').toLowerCase()===txt.toLowerCase()) input.dataset.correct='true';
+        label.appendChild(input);
+        const span=document.createElement('span');
+        span.textContent=`${ABC[idx]}) ${txt}`;
+        label.appendChild(span);
+        opts.appendChild(label);
+      });
+      card.appendChild(opts);
+    }
+    else if(q.type==='fill'){
+      const inp=document.createElement('input');
+      inp.className='fillin';
+      inp.placeholder='Escribe la(s) palabra(s) exacta(s)';
+      inp.name='q'+q.id;
+      card.appendChild(inp);
+    }
+    quizEl.appendChild(card);
+  });
+}
+
+render();
+
+// === Calificar
+document.getElementById('grade').addEventListener('click',()=>{
+  const cards=[...document.querySelectorAll('.card')];
+  let correct=0;
+  cards.forEach((card,idx)=>{
+    const q=QUESTIONS[idx];
+    card.querySelectorAll('.opt, .fillin').forEach(el=>el.classList.remove('correct','incorrect'));
+    const prev=card.querySelector('.result'); if(prev) prev.remove();
+    let ok=false;
+    if(q.type==='mcq' || q.type==='vf'){
+      const chosen=card.querySelector('input:checked');
+      const labels=card.querySelectorAll('.opt');
+      labels.forEach(l=>{const inp=l.querySelector('input'); if(inp.dataset.correct==='true') l.classList.add('correct');});
+      if(chosen){ if(chosen.dataset.correct==='true') ok=true; else chosen.closest('.opt').classList.add('incorrect'); }
+    } else if(q.type==='fill'){
+      const inp=card.querySelector('input.fillin');
+      const ans=normalize(inp.value);
+      const target=Array.isArray(q.correct)? q.correct.map(normalize): [normalize(q.correct)];
+      if(target.some(t=>t===ans)) { ok=true; inp.classList.add('correct'); } else { inp.classList.add('incorrect'); }
+    }
+    if(ok) correct++;
+    const res=document.createElement('div');
+    res.className='result ' + (ok? '' : 'bad');
+    res.textContent= ok? '✔ Correcto' : '✘ Incorrecto';
+    card.appendChild(res);
+  });
+  const sum=document.getElementById('summary');
+  sum.innerHTML=`<div class="card"><strong>Puntuación:</strong> ${correct} / ${QUESTIONS.length} (${Math.round(correct/QUESTIONS.length*100)}%)</div>`;
+});
+
+// Reiniciar
+document.getElementById('reset').addEventListener('click',()=>{
+  render();
+  document.getElementById('summary').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// Mostrar respuestas
+document.getElementById('reveal').addEventListener('click',()=>{
+  const cards=[...document.querySelectorAll('.card')];
+  cards.forEach((card)=>{
+    const correctInput=card.querySelector('input[data-correct=true]');
+    if(correctInput) correctInput.checked=true;
+    card.querySelectorAll('.opt').forEach(l=>{
+      const inp=l.querySelector('input');
+      if(inp.dataset.correct==='true') l.classList.add('correct');
     });
   });
-  </script>
+});
+</script>
 </body>
 </html>
