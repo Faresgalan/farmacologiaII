@@ -1,503 +1,398 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cuestionarios Interactivos – Genética</title>
-<meta name="color-scheme" content="dark light">
-<style>
-:root{--bg:#0b1220;--bg2:#0f172a;--card:#0f172a;--ink:#e5e7eb;--muted:#9ca3af;--accent:#22d3ee;--ok:#22c55e;--bad:#ef4444;--br:#1f2937}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--ink)}
-.container{max-width:1000px;margin:0 auto;padding:24px}
-header{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
-h1{font-size:clamp(20px,4vw,28px);margin:0 0 4px 0}
-.sub{color:var(--muted)}
-select,button,input{background:rgba(15,23,42,.6);color:var(--ink);border:1px solid var(--br);border-radius:12px;padding:10px 12px}
-button:hover,select:hover,input:hover{border-color:#334155}
-button:disabled{opacity:.6;cursor:not-allowed}
-.badge{display:inline-flex;align-items:center;border:1px solid var(--br);background:rgba(2,6,23,.6);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--ink)}
-.card{background:rgba(17,24,39,.7);border:1px solid var(--br);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-.qtitle{font-size:18px;font-weight:700;margin:8px 0 14px 0}
-.options{display:grid;gap:10px}
-.opt{display:block;text-align:left;border:1px solid var(--br);border-radius:12px;padding:12px 14px}
-.opt.correct{border-color:#16a34a;background:rgba(34,197,94,.12)}
-.opt.wrong{border-color:#e11d48;background:rgba(239,68,68,.12)}
-.vf{display:flex;gap:10px}
-.controls{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px;flex-wrap:wrap}
-.progress{color:var(--muted);font-size:14px}
-.expl{color:#cbd5e1;font-size:14px;margin-top:8px;line-height:1.45}
-.footer{color:#94a3b8;font-size:12px;margin-top:20px}
-.center{text-align:center}
-.score{font-size:28px;font-weight:800;margin-bottom:6px}
-.ok{color:#86efac}
-.bad{color:#fca5a5}
-hr{border:none;border-top:1px solid var(--br);margin:16px 0}
-input[type='text']{width:100%}
-.topline{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
-.topicline{display:flex;gap:8px;align-items:center;margin:8px 0}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cuestionario Interactivo #1 – Fármacos Antivirales (v2)</title>
+  <meta name="color-scheme" content="dark light">
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#22d3ee;--bad:#ef4444;--good:#22c55e}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--ink)}
+    .wrap{max-width:960px;margin:32px auto;padding:24px}
+    header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px}
+    h1{font-size:clamp(20px,3vw,28px);margin:0;letter-spacing:.2px}
+    .meta{color:var(--muted);font-size:14px}
+    .card{background:rgba(17,24,39,.8);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;margin:14px 0}
+    .q{display:grid;gap:12px}
+    .q-title{font-weight:700}
+    .opts{display:grid;gap:8px;margin-top:6px}
+    .opt{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:10px 12px;border-radius:12px;cursor:pointer}
+    .opt input{margin-top:3px}
+    .opt span{
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden
+    }
+    .fillin{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.2);color:var(--ink)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px}
+    button{background:var(--accent);border:none;color:#00232c;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    button.secondary{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.15)}
+    .result{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35)}
+    .bad{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
+    .badge{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:var(--muted)}
+    .explain{color:var(--muted);font-size:13px;margin-top:8px}
+    .correct{outline:2px solid var(--good)}
+    .incorrect{outline:2px solid var(--bad)}
+    footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+    noscript{display:block;margin-top:12px;color:#fecaca;background:#7f1d1d;padding:10px;border-radius:10px}
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap">
     <header>
       <div>
-        <h1>Cuestionarios Interactivos – Genética</h1>
-        <div class="sub">Selecciona un tema y practica 15 preguntas mixtas con retroalimentación inmediata.</div>
+        <h1>Cuestionario Interactivo #1 – Fármacos Antivirales</h1>
+        <div class="meta">PRACTICA</div>
       </div>
-      <div>
-        <select id="topicSelect" title="Seleccionar tema"></select>
-        <button id="restartBtn">Reiniciar</button>
-      </div>
+      <div class="badge" id="badgeCount"></div>
     </header>
 
-    <main id="app">
-      <div class="topicline">
-        <span class="badge">Tema</span>
-        <strong id="topicTitle"></strong>
-      </div>
+    <noscript>Este cuestionario requiere JavaScript habilitado.</noscript>
+    <div id="quiz" aria-live="polite"></div>
 
-      <div id="quizArea"></div>
+    <div class="actions" role="group" aria-label="acciones">
+      <button id="grade">Calificar</button>
+      <button class="secondary" id="reset">Reiniciar</button>
+      <button class="secondary" id="reveal">Mostrar respuestas</button>
+    </div>
 
-      <div class="controls">
-        <button id="prevBtn">Anterior</button>
-        <div class="progress" id="progressInfo">Progreso: 0/0 • Aciertos: 0</div>
-        <button id="nextBtn">Siguiente</button>
-      </div>
+    <div id="summary" aria-live="polite"></div>
 
-      <div class="footer">Fuente: Diapositivas de clase (Mecanismos no clásicos; Casos clínicos SPW/SA; DDS I & II). Elaborado para repaso previo a examen.</div>
-    </main>
+    <footer>
+      <p>Tip: La Dra. enfatiza <strong>dosis + duración</strong>. Revisa con atención 3, 6, 16 y 19.</p>
+    </footer>
   </div>
 
 <script>
-// Utilidades
-function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
-// función normalize compatible con todos los navegadores
-function normalize(s){
-  return String(s||'')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // elimina diacríticos
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-function normalize(s){
-  // Elimina acentos/diacríticos de forma compatible
-  return String(s||'')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // elimina diacríticos
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-// Banco de preguntas (idéntico en contenido al de la versión React del canvas)
-const Q_NO_CLASICOS = [
-  {id:'nc-1',type:'mcq',q:'¿Qué describe mejor a una variante en número de copias (CNV)?',options:[
-    'Una mutación puntual que cambia un aminoácido',
-    'Un segmento de DNA presente en número variable/desbalanceado entre individuos',
-    'Una inversión pericéntrica sin pérdida de material genético',
-    'Un polimorfismo de un solo nucleótido (SNP)'
-  ],answer:1,expl:'Las CNV son segmentos de DNA cuyo número de copias varía entre individuos y alteran el estado diploide normal.'},
-  {id:'nc-2',type:'tf',q:'Las CNV contribuyen tanto a enfermedades mendelianas como a susceptibilidad en trastornos complejos.',answer:true,expl:'Las CNV participan en evolución, diversidad genética y múltiples patologías mendelianas y complejas.'},
-  {id:'nc-3',type:'mcq',q:'¿Qué son las LCR (low copy repeats) o duplicaciones segmentarias?',options:['>10 kb con <70% de identidad','>1 kb con >90% de identidad','>100 bp con >99% de identidad','>1 Mb con >80% de identidad'],answer:1,expl:'Por definición, LCR son fragmentos >1 kb y >90% de homología; favorecen inestabilidad y CNV.'},
-  {id:'nc-4',type:'mcq',q:'La recombinación homóloga no alélica (NAHR) entre LCR cercanas puede originar:',options:['Solo mutaciones puntuales','Deleciones, duplicaciones o inversiones','Translocaciones recíprocas únicamente','Isocromosomas'],answer:1,expl:'El mal alineamiento entre LCR puede producir NAHR y con ello deleciones/duplicaciones/inversiones.'},
-  {id:'nc-5',type:'mcq',q:'Se denomina trastorno genómico cuando el fenotipo se debe principalmente a:',options:[
-    'Efecto de una mutación sin sentido',
-    'Alteración en número/posición de genes por microdeleciones/microduplicaciones',
-    'Hipermetilación global del genoma',
-    'Inestabilidad de tripletes'
-  ],answer:1,expl:'Los trastornos genómicos derivan de rearreglos submicroscópicos que alteran dosis/posición génica.'},
-  {id:'nc-6',type:'tf',q:'El efecto de dosis génica es un mecanismo por el cual una CNV puede causar enfermedad.',answer:true,expl:'Cambios en el número de copias de genes sensibles a dosis modifican su expresión y fenotipo.'},
-  {id:'nc-7',type:'mcq',q:'¿Qué enunciado define mejor la impronta genómica?',options:[
-    'Silenciamiento aleatorio de un alelo en todas las células',
-    'Marcaje epigenético dependiente del origen parental que determina expresión monoalélica',
-    'Pérdida de heterocigosidad somática','Mutación del ADN mitocondrial'
-  ],answer:1,expl:'La impronta es un marcaje epigenético según el origen parental que regula la expresión monoalélica.'},
-  {id:'nc-8',type:'fill',q:'Completa: En impronta genómica, el _____ de DNA y las modificaciones de histonas son claves para el marcaje.',answer:'metilacion',expl:'La metilación del DNA y cambios en histonas conforman el marcaje epigenético que sostiene la impronta.'},
-  {id:'nc-9',type:'mcq',q:'¿Qué cromosomas contienen clústers clásicos con genes improntados?',options:['1, 2, 3, 4','6, 7, 11, 14 y 15','16, 17, 18, 19','20, 21, 22, X'],answer:1,expl:'En humanos se reconocen clústers con impronta en 6, 7, 11, 14 y 15, entre otros.'},
-  {id:'nc-10',type:'tf',q:'La impronta puede ser tejido‑específica o incluso polimórfica entre individuos sanos.',answer:true,expl:'Se ha demostrado variación tejido‑específica y polimórfica en algunos genes improntados.'},
-  {id:'nc-11',type:'mcq',q:'La disomía uniparental (UPD) se define como:',options:[
-    'Herencia de ambos cromosomas homólogos de un solo progenitor','Duplicación segmentaria intra‑cromosómica',
-    'Pérdida de un cromosoma (monosomía)','No disyunción mitótica sin consecuencias'
-  ],answer:0,expl:'UPD: ambos homólogos (o una región) provienen de un mismo padre o madre.'},
-  {id:'nc-12',type:'mcq',q:'Si el error ocurre en meiosis I, la UPD resultante tiende a ser:',options:['Isodisomía','Heterodisomía','Monosomía','Tetrasomía'],answer:1,expl:'Meiosis I → heterodisomía; Meiosis II → isodisomía.'},
-  {id:'nc-13',type:'fill',q:'Completa: El ‘rescate trisómico’ puede originar una UPD tras la pérdida del cromosoma del progenitor _____.',answer:'no disomico',expl:'En rescate trisómico, si se pierde el cromosoma del gameto monosómico original, quedan dos del mismo progenitor (UPD).'},
-  {id:'nc-14',type:'mcq',q:'Un defecto en el centro de control de impronta (ICR) suele producir:',options:[
-    'Silenciamiento correcto del alelo improntado','Expresión bialélica o silenciamiento de ambos alelos en el clúster',
-    'Solo metilación mitocondrial','Exclusivamente mutaciones puntuales'
-  ],answer:1,expl:'Deleciones/defectos en ICR alteran el marcaje y la regulación a distancia del clúster improntado.'},
-  {id:'nc-15',type:'tf',q:'Las técnicas de reproducción asistida podrían incrementar el riesgo de trastornos relacionados con impronta.',answer:true,expl:'Se ha propuesto mayor riesgo de defectos en el establecimiento/mantenimiento de impronta en T.R.A.'}
-];
-
-const Q_PW_AS = [
-  {id:'pw-1',type:'mcq',q:'El locus crítico compartido por SPW y SA se localiza en:',options:['7q31','15q11‑q13','11p15','14q32'],answer:1,expl:'Ambos síndromes involucran el dominio improntado 15q11‑q13.'},
-  {id:'pw-2',type:'tf',q:'En Prader‑Willi la deleción típica ocurre en el cromosoma materno.',answer:false,expl:'En SPW la deleción es en el cromosoma paterno; en Angelman, en el materno.'},
-  {id:'pw-3',type:'mcq',q:'Hallazgo neonatal universal que orienta a SPW:',options:['Microcefalia','Hipotonía e hiporreflexia con succión débil','Convulsiones tempranas','Macroglosia'],answer:1,expl:'La hipotonía neonatal y succión débil son cardinales en SPW.'},
-  {id:'pw-4',type:'mcq',q:'Entre 1‑6 años, el fenotipo conductual típico en SPW incluye:',options:['Hiperfagia con búsqueda constante de comida','Anorexia persistente','Hiposomnia severa','Hipersexualidad'],answer:0,expl:'Tras la hipotonía inicial, aparece hiperfagia y rápida ganancia ponderal.'},
-  {id:'pw-5',type:'fill',q:'Completa: En SPW, las manos y _____ suelen ser pequeños para la edad.',answer:'pies',expl:'Manos y pies pequeños son rasgos físicos frecuentes en SPW.'},
-  {id:'pw-6',type:'mcq',q:'Gen/ región usada comúnmente para PCR sensible a metilación en el diagnóstico de SPW:',options:['FMR1','SNRPN/SNURF‑SNRPN','UBE3A','H19'],answer:1,expl:'El patrón de metilación en SNRPN permite confirmar SPW.'},
-  {id:'pw-7',type:'tf',q:'La disomía uniparental materna del cromosoma 15 explica ~25‑30% de casos de SPW.',answer:true,expl:'UPD materna 15 es la segunda anomalía más común en SPW.'},
-  {id:'pw-8',type:'mcq',q:'Defecto molecular típico en Angelman (cuando no es deleción ni UPD):',options:['Mutación en UBE3A','Expansión de tripletes en DMPK','Deleción en 7q11.23','Duplicación 17p11.2'],answer:0,expl:'UBE3A (ligasa E3) es el gen crítico en muchos casos de SA.'},
-  {id:'pw-9',type:'tf',q:'En Angelman, la impronta de UBE3A es tejido‑específica (particularmente en neuronas).',answer:true,expl:'El silenciamiento del alelo paterno de UBE3A es relevante en cerebro.'},
-  {id:'pw-10',type:'mcq',q:'Rasgos clínicos consistentes (≈100%) en Angelman:',options:[
-    'Retraso psicomotor grave y ausencia/escasez de lenguaje','Hipotonía leve y macroglosia','Hiperfagia y talla baja','Hepatomegalia y cardiomiopatía'
-  ],answer:0,expl:'El fenotipo clásico incluye retraso grave del desarrollo y lenguaje muy limitado.'},
-  {id:'pw-11',type:'fill',q:'Completa: El patrón EEG característico en SA suele mostrar ondas _____ de gran amplitud facilitadas al cerrar los ojos.',answer:'delta',expl:'Ondas delta y trifásicas de gran amplitud son descritas en SA.'},
-  {id:'pw-12',type:'mcq',q:'¿Cuál de los siguientes es un criterio mayor (Holm) para SPW en >3 años?',options:['Hipopigmentación','Hiperfagia/obsesión por la comida con obesidad central','Estrabismo','Saliva viscosa'],answer:1,expl:'Los criterios mayores incluyen hiperfagia/obsesión por comida, hipotonía inicial, hipogonadismo, etc.'},
-  {id:'pw-13',type:'tf',q:'El tratamiento con hormona de crecimiento (GH) puede mejorar talla final, masa magra y conducta en SPW.',answer:true,expl:'La GH ha mostrado beneficios multifactoriales cuando se inicia tempranamente.'},
-  {id:'pw-14',type:'mcq',q:'En SPW/SA, las grandes deleciones de novo (5‑7 Mb) son frecuentes y suelen estar mediadas por:',options:['Puntos de ruptura BP1‑BP3 en 15q11‑q13','Secuencias Alu en 1p36','Inestabilidad en telómeros','Tripletes CGG'],answer:0,expl:'Recombinación no homóloga mediada por LCR define BP1‑BP3.'},
-  {id:'pw-15',type:'fill',q:'Completa: El gen P(OCA2) dentro de 15q11‑q13 puede explicar la _____ en pacientes con deleción.',answer:'hipopigmentacion',expl:'Efecto de dosis en OCA2 se asocia a hipopigmentación en deleciones del dominio.'}
-];
-
-const Q_DDS_I = [
-  {id:'dds1-1',type:'tf',q:'Desde 2006 se prefiere el término ‘Desórdenes del Desarrollo Sexual (DDS)’ en lugar de ‘seudohermafroditismo’.',answer:true,expl:'La nueva nomenclatura evita términos peyorativos y mejora precisión clínica.'},
-  {id:'dds1-2',type:'mcq',q:'¿Cuál es la alteración cromosómica más frecuente en varones y causa de hipogonadismo?',options:['45,X','47,XXY','47,XYY','46,XX'],answer:1,expl:'Síndrome de Klinefelter, 47,XXY, 1/660 varones.'},
-  {id:'dds1-3',type:'mcq',q:'Fenotipo típico de Klinefelter incluye:',options:['Talla baja y macroorquidia','Estatura alta, testículos pequeños y ginecomastia','Microcefalia y clinodactilia','Estenosis pilórica'],answer:1,expl:'Estatura ↑, hipogonadismo, azoospermia, ginecomastia.'},
-  {id:'dds1-4',type:'tf',q:'Pacientes con Klinefelter presentan mayor riesgo de síndrome metabólico y DM2.',answer:true,expl:'También presentan cambios en composición corporal y densidad ósea.'},
-  {id:'dds1-5',type:'mcq',q:'Tratamiento recomendado en Klinefelter para desarrollo puberal y masa ósea:',options:['Estrógenos','Testosterona','GH','Levotiroxina'],answer:1,expl:'Terapia de reemplazo con testosterona desde la pubertad.'},
-  {id:'dds1-6',type:'mcq',q:'Cariótipo clásico del síndrome de Turner:',options:['45,X','47,XXX','46,XY','45,X/46,XY'],answer:0,expl:'El 45,X explica ~50% de ST; el resto mosaicos o aberraciones estructurales.'},
-  {id:'dds1-7',type:'mcq',q:'Hallazgo neonatal patognomónico de Turner:',options:['Hernia inguinal','Edema en manos y pies y piel redundante en nuca','Macrocefalia','Hipogonadismo masculino'],answer:1,expl:'Secundario a higroma quístico in útero; puede acompañarse de cardiopatías.'},
-  {id:'dds1-8',type:'tf',q:'La DGM 45,X/46,XY con estría gonadal contralateral aumenta riesgo de neoplasia gonadal.',answer:true,expl:'Se recomienda resección de estrías/focos disgenéticos por riesgo oncológico.'},
-  {id:'dds1-9',type:'mcq',q:'¿Cuál NO corresponde al mecanismo de acción androgénico?',options:['Unión a receptor citosólico y translocación nuclear','Activación/repr. transcripcional','Conversión a DHT por 5α‑reductasa','Síntesis de catecolaminas'],answer:3,expl:'La vía androgénica no involucra catecolaminas.'},
-  {id:'dds1-10',type:'fill',q:'Completa: El paso limitante de esteroidogénesis es la conversión de colesterol a _____ (CYP11A1).',answer:'pregnenolona',expl:'El complejo P450scc convierte colesterol → pregnenolona.'},
-  {id:'dds1-11',type:'mcq',q:'Zona fetal de la suprarrenal produce principalmente:',options:['Aldosterona','Cortisol','Sulfato de DHEA (DHEA‑S)','Progesterona'],answer:2,expl:'En el feto: zona interna (fetal) produce DHEA‑S.'},
-  {id:'dds1-12',type:'tf',q:'El seno y tubérculo genital pueden convertir T en DHT antes de diferenciar genitales externos.',answer:true,expl:'La DHT es crucial para la diferenciación de genitales externos masculinos.'},
-  {id:'dds1-13',type:'mcq',q:'En Turner, el diagnóstico prenatal puede sospecharse por:',options:['Trisomía 21 en cribado','Edema fetal por USG y triple marcador alterado','Polihidramnios aislado','Microcefalia'],answer:1,expl:'Ecografía + marcadores séricos anómalos orientan a ST.'},
-  {id:'dds1-14',type:'fill',q:'Completa: En Klinefelter es típica la _____ de andrógenos con azoospermia.',answer:'disminucion',expl:'Hipogonadismo con T baja y testículos pequeños.'},
-  {id:'dds1-15',type:'mcq',q:'Clasificación general DDS 46,XY (Parte I) incluye:',options:['Solo trastornos cromosómicos','Desarrollo gonadal y síntesis/acción de andrógenos','Solo esteroidogénesis suprarrenal','Solo mutaciones en SRY'],answer:1,expl:'DDS 46,XY: A) desarrollo gonadal; B) síntesis o acción de andrógenos.'}
-];
-
-const Q_DDS_II = [
-  {id:'dds2-1',type:'mcq',q:'En hipoplasia de células de Leydig por LHCGR, el fenotipo puede ser:',options:['Siempre femenino','Variable: de ambiguo a femenino','Siempre masculino normal','Letal'],answer:1,expl:'La virilización es escasa; fenotipo desde ambiguo a femenino.'},
-  {id:'dds2-2',type:'mcq',q:'Gen/enzima deficiente en 17β‑HSD3:',options:['SRD5A2','HSD17B3','CYP21A2','CYP11B1'],answer:1,expl:'HSD17B3 (9q22) convierte androstenediona → testosterona en testículo.'},
-  {id:'dds2-3',type:'tf',q:'Deficiencia de 17β‑HSD3: fenotipo a menudo femenino al nacer y virilización puberal.',answer:true,expl:'Muchos pacientes se virilizan en la pubertad.'},
-  {id:'dds2-4',type:'mcq',q:'La deficiencia de 5α‑reductasa tipo 2 (SRD5A2) provoca:',options:['Falla en diferenciar genitales externos masculinos','Hiperglucemia neonatal','Hipocalcemia','Amenorrea hipotalámica'],answer:0,expl:'No se forma DHT suficiente para genitales externos; cambio de rol en pubertad es descrito.'},
-  {id:'dds2-5',type:'tf',q:'En insensibilidad completa a andrógenos (46,XY), se observa amenorrea primaria con desarrollo mamario y vello púbico normal.',answer:false,expl:'Vello es escaso/ausente; hay desarrollo mamario por aromatización periférica.'},
-  {id:'dds2-6',type:'mcq',q:'Estudio de imagen estándar para evaluar genitales internos en 46,XY con amenorrea primaria fenotipo femenino:',options:['Radiografía simple','Resonancia magnética (ideal) o USG pélvico','Gammagrafía ósea','Ecocardiograma'],answer:1,expl:'RM es estándar; al menos USG pélvico transabdominal.'},
-  {id:'dds2-7',type:'fill',q:'Completa: En insensibilidad androgénica completa, la vagina suele ser _____ en fondo de saco.',answer:'rudimentaria',expl:'Genitales externos femeninos con vagina corta/rudimentaria; testículos internos.'},
-  {id:'dds2-8',type:'mcq',q:'DDS ovotesticular 46,XX: manejo ideal respecto a cirugía de asignación:',options:['Cirugía neonatal obligatoria','Posponer hasta decisión del paciente','Resección inmediata de ambos tejidos','No requiere manejo'],answer:1,expl:'Posponer hasta que el paciente defina identidad de género.'},
-  {id:'dds2-9',type:'tf',q:'Tras resecar la porción testicular del ovotestes, algunas pacientes 46,XX pueden menstruar y lograr embarazos.',answer:true,expl:'≈38% reportado tras manejo conservador acorde al género elegido.'},
-  {id:'dds2-10',type:'mcq',q:'Deficiencia 3β‑HSD2 fetal (46,XX/46,XY) se caracteriza por:',options:['Hipercortisolismo','Deficiencia grave de glucocorticoides y mineralocorticoides con ambigüedad genital','Solo virilización leve sin alteraciones electrolíticas','Hipopituitarismo'],answer:1,expl:'Ambos sexos nacen con genitales ambiguos y pérdida de sal variable.'},
-  {id:'dds2-11',type:'mcq',q:'Causa más frecuente de ambigüedad genital en 46,XX:',options:['Deficiencia 21‑hidroxilasa (HSC)','Deficiencia 11β‑hidroxilasa','Insensibilidad androgénica','SRY duplicado'],answer:0,expl:'Hiperplasia suprarrenal congénita por CYP21A2.'},
-  {id:'dds2-12',type:'tf',q:'En la forma clásica perdedora de sal por 21‑hidroxilasa, los varones presentan genitales externos anómalos.',answer:false,expl:'Los varones suelen no tener anomalías externas; sí hiperpigmentación y crisis de sal.'},
-  {id:'dds2-13',type:'fill',q:'Completa: En 21‑hidroxilasa, la 17α‑hidroxiprogesterona se encuentra _____ (↑/↓).',answer:'elevada',expl:'La 17‑OHP está elevada en ambas formas (clásica y no clásica).'},
-  {id:'dds2-14',type:'mcq',q:'Deficiencia 11β‑hidroxilasa (CYP11B1) en 46,XX suele asociar:',options:['Hipotensión','Hipertensión por 11‑desoxicorticosterona','Hipercalcemia','Hipotiroidismo'],answer:1,expl:'La DOC tiene actividad mineralocorticoide → hipertensión.'},
-  {id:'dds2-15',type:'mcq',q:'En insensibilidad androgénica completa (46,XY), ¿cuándo resecar gónadas?',options:['Antes de la pubertad, siempre','Después de completar desarrollo mamario y talla final, por riesgo tumoral','Nunca','Solo si hay dolor'],answer:1,expl:'Tras pubertad para permitir desarrollo; luego gonadectomía por riesgo de neoplasia.'}
-];
-const Q_RASGOS_MORFO = [ // 5) Rasgos físicos y morfología
-  {id:'ras-1',type:'mcq',q:'¿Cuáles son los puntos de referencia del perímetro cefálico?',options:['Glabela, euriones y opistocráneo','Nasion y bregma','Trago y mentón','Lambda y mastoidea'],answer:0},
-  {id:'ras-2',type:'mcq',q:'La macrosomía con hemihipertrofia orienta a:',options:['Síndrome de Beckwith–Wiedemann','Síndrome de Sotos','Síndrome de Proteus','Síndrome de Costello'],answer:0},
-  {id:'ras-3',type:'mcq',q:'¿Qué es la turricefalia?',options:['Cabeza alta con proporciones de largo y ancho reducidas','Cabeza corta y ancha','Cierre exclusivo de la sutura sagital','Cráneo plano'],answer:0},
-  {id:'ras-4',type:'mcq',q:'Facies burda se asocia con:',options:['Hipotiroidismo y trastornos metabólicos','Síndrome de Cushing','Síndrome de Down','Síndrome de Edwards'],answer:0},
-  {id:'ras-5',type:'mcq',q:'Macroglosia y macrosomía con surco medio lingual sugiere:',options:['Síndrome Simpson–Golabi–Behmel','Síndrome de Beckwith–Wiedemann','Síndrome de Proteus','Síndrome de Costello'],answer:0},
-  {id:'ras-6',type:'mcq',q:'Cuello alado con implantación baja del pelo se ve en:',options:['Turner, Noonan y Costello','Marfan','Down','Edwards'],answer:0},
-  {id:'ras-7',type:'mcq',q:'Hernias umbilicales grandes son frecuentes en:',options:['Trisomías 21, 18 y 13','Noonan','Beckwith–Wiedemann','Apert'],answer:0},
-];
-
-const Q_PRENATALES = [ // 6) Alteraciones prenatales y síndromes
-  {id:'pre-1',type:'mcq',q:'¿Qué condición se asocia a polihidramnios?',options:['Atresia esofágica','Hipotiroidismo','Acondroplasia','Trisomía 21'],answer:0},
-  {id:'pre-2',type:'mcq',q:'La gestación prolongada puede observarse en:',options:['Trisomía 18','Turner','Neurofibromatosis','Marfan'],answer:0},
-  {id:'pre-3',type:'mcq',q:'El oligohidramnios se relaciona principalmente con:',options:['Malformaciones renales','Atresia anal','Cardiopatías congénitas','Labio leporino'],answer:0},
-  {id:'pre-4',type:'mcq',q:'Talla baja con facies triangular y comisuras hacia abajo sugiere:',options:['Síndrome de Silver–Russell','Down','Angelman','Noonan'],answer:0},
-  {id:'pre-5',type:'mcq',q:'La marcha en “pato” es típica de:',options:['Distrofia muscular','Rett','Marfan','Ataxia telangiectasia'],answer:0},
-  {id:'pre-6',type:'mcq',q:'Manchas café con leche + pecas axilares + nódulos de Lisch corresponden a:',options:['Neurofibromatosis tipo 1','McCune–Albright','Waardenburg','Costello'],answer:0},
-  {id:'pre-7',type:'mcq',q:'Defecto en impronta 11p15 se asocia a:',options:['Beckwith–Wiedemann','Silver–Russell','Williams','Rett'],answer:0},
-];
-
-const Q_SINDROMES = [ // 7) Síndromes genéticos específicos
-  {id:'sin-1',type:'mcq',q:'Trastorno ligado al X por expansión CGG en FMR1:',options:['Síndrome de X frágil','Síndrome de Rett','Prader–Willi','Angelman'],answer:0},
-  {id:'sin-2',type:'mcq',q:'Patrón estelar en iris, hipercalcemia y fenotipo social amistoso:',options:['Síndrome de Williams','Alagille','Marfan','Waardenburg'],answer:0},
-  {id:'sin-3',type:'mcq',q:'Orejas arrugadas, contracturas digitales, marfanoide y prolapso mitral:',options:['Síndrome de Beals','Stickler','Noonan','DiGeorge'],answer:0},
-  {id:'sin-4',type:'mcq',q:'Apéndices preauriculares + coloboma de iris + cardiopatía (mosaicismo trisomía 22):',options:['Síndrome del ojo de gato','Down','Turner','Edwards'],answer:0},
-  {id:'sin-5',type:'mcq',q:'Incisivo central único, fosetas labiales y frénulas gingivolabiales:',options:['Síndrome de Van der Woude','Treacher–Collins','Pierre Robin','Crouzon'],answer:0},
-  {id:'sin-6',type:'mcq',q:'BOR se caracteriza por:',options:['Orejas acopadas, fístulas branquiales, hipoacusia y alteraciones renales','Polidactilia y microtia','Anotia y agenesia renal bilateral','Craneosinostosis con estenosis anal'],answer:0},
-  {id:'sin-7',type:'mcq',q:'Buftalmos congénito, ictericia neonatal y estenosis pulmonar periférica:',options:['Síndrome de Alagille','Marfan','DiGeorge','Beals'],answer:0},
-];
-
-const Q_CUTANEAS = [ // 8) Lesiones cutáneas y craneofaciales
-  {id:'cut-1',type:'mcq',q:'Hiperpigmentación lineal (lesión cutánea lineal asociada a compromiso sistémico):',options:['Verdadero','Falso','Solo en adultos','Solo vascular'],answer:0},
-  {id:'cut-2',type:'mcq',q:'Manchas café con leche + pecas axilares + nódulos de Lisch:',options:['Neurofibromatosis tipo 1','McCune–Albright','Alagille','Costello'],answer:0},
-  {id:'cut-3',type:'mcq',q:'Acantosis nigricans además de obesidad y RI puede verse en:',options:['Leprechaunismo y síndrome de Costello','Marfan','Turner','Waardenburg'],answer:0},
-  {id:'cut-4',type:'mcq',q:'Macrocefalia con asimetría corporal y nevus sebáceo sugiere:',options:['Síndrome de Proteus','Beckwith–Wiedemann','Crouzon','Sotos'],answer:0},
-  {id:'cut-5',type:'mcq',q:'Turricefalia significa:',options:['Cabeza alta con proporciones reducidas','Cabeza ancha','Dolicocefalia','Cráneo plano'],answer:0},
-  {id:'cut-6',type:'mcq',q:'Opacidad corneal por glaucoma congénito se denomina:',options:['Buftalmos o esclerocórnea','Microcórnea','Catarata congénita','Pterigión'],answer:0},
-  {id:'cut-7',type:'mcq',q:'Macroglosia + visceromegalia neonatal orienta a:',options:['Beckwith–Wiedemann','Proteus','Sotos','Simpson–Golabi–Behmel'],answer:0},
-];
-
-const Q_ESQUELETICAS = [ // 9) Alteraciones esqueléticas y craneales
-  {id:'esq-1',type:'mcq',q:'Identidad rara que causa asimetría por deformidades progresivas:',options:['Fibrodisplasia osificante progresiva','Marfan','Displasia cleidocraneal','Neurofibromatosis I'],answer:0},
-  {id:'esq-2',type:'mcq',q:'Placas hiperqueratósicas, hiperpigmentadas y aterciopeladas en pliegues:',options:['Acantosis nigricans','Psoriasis inversa','Melanosis','Líquen plano'],answer:0},
-  {id:'esq-3',type:'mcq',q:'Fontanelas abiertas hasta la adultez pueden verse en:',options:['Displasia cleidocraneal y picnodisostosis','Acondroplasia','Osteogénesis imperfecta','Marfan'],answer:0},
-  {id:'esq-4',type:'mcq',q:'Las manchas hipocrómicas lanceoladas NO se relacionan con esclerosis tuberosa:',options:['Falso (sí se relacionan)','Verdadero','Solo en adultos','Solo si son múltiples'],answer:0},
-  {id:'esq-5',type:'mcq',q:'Turricefalia + exoftalmos + nariz en pico de loro + mandíbula prominente sugiere:',options:['Síndrome de Crouzon','Apert','Pfeiffer','Saethre–Chotzen'],answer:0},
-  {id:'esq-6',type:'mcq',q:'Alteraciones del pabellón auricular pueden involucrar:',options:['Criptotia, acopadas, rotadas','Solo microtia','Solo prominentes','Solo bajas'],answer:0},
-  {id:'esq-7',type:'mcq',q:'En BOR, se asocian:',options:['Fístulas branquiales, hipoacusia y alteraciones renales','Polidactilia','Macroglosia','Atresia esofágica'],answer:0},
-];
-
-const Q_PRADER = [ // 10) Síndrome de Prader–Willi (cuestionario dedicado)
-  {id:'pwr-1',type:'mcq',q:'Causa del síndrome de Prader–Willi:',options:['Microdeleción o UPD materna 15q11–q13','Mutación en UBE3A','Trisomía 21','Microdeleción 7q11.23'],answer:0},
-  {id:'pwr-2',type:'mcq',q:'Signo universal en RN con SPW:',options:['Hipotonía neonatal','Convulsiones','Cianosis','Macroglosia'],answer:0},
-  {id:'pwr-3',type:'mcq',q:'Problemas conductuales frecuentes:',options:['Rabietas, terquedad y búsqueda constante de comida','Mutismo selectivo','Ansiedad generalizada','Depresión'],answer:0},
-  {id:'pwr-4',type:'mcq',q:'Rasgos físicos típicos:',options:['Manos/pies pequeños, obesidad central, hipoplasia genital','Macrocefalia','Talla alta','Piel gruesa'],answer:0},
-  {id:'pwr-5',type:'mcq',q:'Complicaciones médicas:',options:['Obesidad severa, apnea obstructiva y DM','Hipotiroidismo','Insuficiencia renal','Cardiopatía congénita'],answer:0},
-  {id:'pwr-6',type:'mcq',q:'Confirmación diagnóstica habitual:',options:['PCR sensible a metilación de SNRPN','FISH 22q11','Cariotipo convencional','MLPA 7q11.23'],answer:0},
-  {id:'pwr-7',type:'mcq',q:'Tratamiento que mejora el pronóstico:',options:['Hormona de crecimiento (GH)','Corticoides','Antidepresivos','Benzodiacepinas'],answer:0},
-];
-
-const Q_RASGOS_GENERALES = [ // 11) Rasgos físicos generales (extra de tus listas)
-  {id:'rgen-1',type:'mcq',q:'Índice cefálico normal:',options:['76–80.9%','60–65%','85–90%','50–55%'],answer:0},
-  {id:'rgen-2',type:'mcq',q:'Poliosis se refiere a:',options:['Mechón blanco/enacencimiento prematuro','Canicie senil','Hipertricosis','Alopecia focal'],answer:0},
-  {id:'rgen-3',type:'mcq',q:'Acantosis nigricans se caracteriza por:',options:['Placas hiperqueratósicas aterciopeladas en pliegues','Pápulas umbilicadas','Vesículas dolorosas','Máculas café con leche'],answer:0},
-  {id:'rgen-4',type:'mcq',q:'Macrocefalia con talla alta se observa en:',options:['Síndrome de Sotos','Síndrome de Beckwith–Wiedemann','Síndrome de Proteus','Síndrome de Noonan'],answer:0},
-  {id:'rgen-5',type:'mcq',q:'Alteración torácica típica de Turner:',options:['Tórax en escudo con teletelia','Pectus carinatum','Tórax en barril','Pectus excavatum'],answer:0},
-  {id:'rgen-6',type:'mcq',q:'Marcha típica de neuropatía periférica:',options:['Equina','Atáxica','Espástica','Anserina'],answer:0},
-  {id:'rgen-7',type:'mcq',q:'Hipopigmentación generalizada por falla de melanina:',options:['Albinismo oculocutáneo','Vitiligo','Melasma','Fenilcetonuria'],answer:0},
-];
-
-const Q_DISMORFO_GENERAL = [ // 12) Dismorfología general
-  {id:'dism-1',type:'mcq',q:'Hallazgos cutáneos en Waardenburg:',options:['Poliosis y máculas acrómicas','Manchas café con leche','Eritema migratorio','Angiomas planos'],answer:0},
-  {id:'dism-2',type:'mcq',q:'Síndrome con macrosomía y hemihipertrofia:',options:['Beckwith–Wiedemann','Sotos','Proteus','Costello'],answer:0},
-  {id:'dism-3',type:'mcq',q:'La craneosinostosis se debe a:',options:['Cierre prematuro de suturas craneales','Fallo de migración neural','Defecto de colágeno','Osificación endocondral'],answer:0},
-  {id:'dism-4',type:'mcq',q:'Malformación abdominal típica en hijos de madres jóvenes y delgadas:',options:['Gastrosquisis','Onfalocele','Hernia umbilical','Extrofia vesical'],answer:0},
-  {id:'dism-5',type:'mcq',q:'Trigonocefalia se debe a:',options:['Cierre prematuro de sutura metópica','Cierre de sutura sagital','Fallo del etmoides','Micrencefalia'],answer:0},
-  {id:'dism-6',type:'mcq',q:'Plagiocefalia con asimetría facial sugiere:',options:['Muenke o Saethre–Chotzen','Beckwith–Wiedemann','Alagille','Apert'],answer:0},
-  {id:'dism-7',type:'mcq',q:'Crouzon clásico se caracteriza por:',options:['Exoftalmos, nariz en pico de loro y mandíbula prominente','Micrognatia aislada','Hipoplasia malar leve','Hipertricosis'],answer:0},
-];
-
-const Q_CROMO_CRANEO = [ // 13) Cromosomopatías y alteraciones craneales
-  {id:'cc-1',type:'mcq',q:'Cromosomopatía asociada a gestación prolongada:',options:['Trisomía 18','Trisomía 13','Trisomía 21','Monosomía X'],answer:0},
-  {id:'cc-2',type:'mcq',q:'Alteración craneal típica de sinostosis sagital:',options:['Dolicocefalia','Braquicefalia','Plagiocefalia','Turricefalia'],answer:0},
-  {id:'cc-3',type:'mcq',q:'Hallazgo cutáneo típico de NF1:',options:['Manchas café con leche + pecas axilares + nódulos de Lisch','Poliosis','Máculas acrómicas','Eritema anular'],answer:0},
-  {id:'cc-4',type:'mcq',q:'Talla baja, obesidad troncal y discapacidad intelectual sugieren:',options:['Prader–Willi','Angelman','Sotos','Cushing'],answer:0},
-  {id:'cc-5',type:'mcq',q:'Manchas de Brushfield en el iris se observan en:',options:['Síndrome de Down','Edwards','Turner','Marfan'],answer:0},
-  {id:'cc-6',type:'mcq',q:'Facies de “silbador” con microstomía y alteraciones en carpo/tarso:',options:['Freeman–Sheldon','Apert','Crouzon','Alagille'],answer:0},
-  {id:'cc-7',type:'mcq',q:'Manchas hipocrómicas lanceoladas en piel orientan a:',options:['Esclerosis tuberosa','NF2','Beckwith–Wiedemann','Waardenburg'],answer:0},
-];
-
-const Q_NOSOLOGIA_MORFO = [ // 14) Nosología y morfología general
-  {id:'nm-1',type:'mcq',q:'Cabeza alta con proporciones de largo y ancho reducidas:',options:['Turricefalia','Braquicefalia','Plagiocefalia','Dolicocefalia'],answer:0},
-  {id:'nm-2',type:'mcq',q:'Encanecimiento prematuro (mechón blanco) en cabello/pestañas:',options:['Poliosis','Canicie senil','Hipertricosis','Alopecia'],answer:0},
-  {id:'nm-3',type:'mcq',q:'Masa en región sacrococcígea sin componente óseo, con grasa/músculo/vasos:',options:['Apéndice caudal','Quiste dermoide','Teratoma sacrococcígeo','Meningocele'],answer:0},
-  {id:'nm-4',type:'mcq',q:'Índice cefálico normal:',options:['76–80.9%','60–65%','85–90%','50–55%'],answer:0},
-  {id:'nm-5',type:'mcq',q:'Mayor distancia interpupilar se denomina:',options:['Hipertelorismo','Blefarofimosis','Microftalmia','Exoftalmos'],answer:0},
-  {id:'nm-6',type:'mcq',q:'Cuello alado e implantación baja del pelo se observa en:',options:['Turner, Noonan y Costello','Down','Edwards','Patau'],answer:0},
-  {id:'nm-7',type:'mcq',q:'Deformidad torácica con depresión del esternón:',options:['Pectus excavatum','Pectus carinatum','Tórax en escudo','Tórax en barril'],answer:0},
-];
-
-const TOPICS = [
-  { key: 'no_clasicos', title: 'Mecanismos no clásicos de la herencia', questions: Q_NO_CLASICOS },
-  { key: 'pw_as', title: 'Casos clínicos: Prader‑Willi y Angelman', questions: Q_PW_AS },
-  { key: 'dds_i', title: 'DDS – Parte I', questions: Q_DDS_I },
-  { key: 'dds_ii', title: 'DDS – Parte II', questions: Q_DDS_II },
-  { key:'rasgos_morfo',   title:'Rasgos físicos y morfología',              questions: Q_RASGOS_MORFO },
-  { key:'prenatales',     title:'Alteraciones prenatales y síndromes',      questions: Q_PRENATALES },
-  { key:'sindromes',      title:'Síndromes genéticos específicos',          questions: Q_SINDROMES },
-  { key:'cutaneas',       title:'Lesiones cutáneas y craneofaciales',       questions: Q_CUTANEAS },
-  { key:'esqueleticas',   title:'Alteraciones esqueléticas',                questions: Q_ESQUELETICAS },
-  { key:'prader_solo',    title:'Síndrome de Prader–Willi',                 questions: Q_PRADER },
-  { key:'rasgos_generales',title:'Rasgos físicos generales',                questions: Q_RASGOS_GENERALES },
-  { key:'dismorfologia',  title:'Dismorfología general',                    questions: Q_DISMORFO_GENERAL },
-  { key:'cromos_craneo',  title:'Cromosomopatías y alteraciones craneales', questions: Q_CROMO_CRANEO },
-  { key:'noso_morfo',     title:'Nosología y morfología general',           questions: Q_NOSOLOGIA_MORFO },
-];
-
-
-// Estado
-let topicKey = TOPICS[0].key;
-let order = [];
-let idx = 0;
-let answers = {}; // { qid: val }
-let shuffledOptionsCache = {}; // { qid: [{i,opt}, ...] }
-
-// DOM
-const topicSelect = document.getElementById('topicSelect');
-const topicTitle = document.getElementById('topicTitle');
-const quizArea = document.getElementById('quizArea');
-const progressInfo = document.getElementById('progressInfo');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const restartBtn = document.getElementById('restartBtn');
-
-// Init select
-for(const t of TOPICS){
-  const opt=document.createElement('option');
-  opt.value=t.key; opt.textContent=t.title;
-  topicSelect.appendChild(opt);
-}
-topicSelect.value = topicKey;
-
-// Helpers
-function getTopic(){ return TOPICS.find(t=>t.key===topicKey); }
-function getCurrentQ(){ const t=getTopic(); return t.questions[order[idx]]; }
-function getAnswer(q){ return answers[q.id]; }
-function setAnswer(q, val){ answers[q.id]=val; render(); }
-
-function isCorrect(q, val){
-  if(q.type==='mcq' || q.type==='tf') return val===q.answer;
-  return normalize(val)===normalize(q.answer);
-}
-
-function countCorrect(){
-  const t=getTopic();
-  let c=0;
-  for(const [qid,val] of Object.entries(answers)){
-    const q=t.questions.find(x=>x.id===qid);
-    if(!q) continue;
-    if(isCorrect(q,val)) c++;
+// ==== PREGUNTAS (4–20) ====
+const QUESTIONS = [
+    {id:1,type:'mcq',q:'1. Son los fármacos utilizados para el tratamiento de enfermedades herpéticas:',
+      opts:[
+        {t:'Aciclovir, valaciclovir, cidofovir, famciclovir, penciclovir, ganciclovir, valganciclovir, foscarnet, fomivirsen, docosanol, idoxuridina, trifluridina', correct:true},
+        {t:'Aciclovir, valaciclovir, famciclovir, ganciclovir, valganciclovir, docosanol, trifluridina, albendazol, nitazoxanida, salbutamol, tetraciclina, amiodarona'},
+        {t:'Penciclovir, docosanol, idoxuridina, trifluridina, amantadina, rimantadina, linezolida, pentamidina, tricabendazol, somatropina, dapsona, daptomicina'},
+        {t:'Ganciclovir, valganciclovir, cidofovir, foscarnet, oseltamivir, zanamivir, carvedilol, doxiciclina, ciprofloxacina, sulfixozasol, neuramidasa'}]},
+  //2
+    {id:2,type:'mcq',q:'2. ¿Cuál es el mecanismo de acción del aciclovir?',
+      opts:[
+        {t:'Inhibe la síntesis del ADN viral al bloquear la ADN polimerasa viral', correct:true},
+        {t:'Bloqueo de la neuraminidasa viral en la membrana polipeptidica de fase replicativa'},
+        {t:'Inhibición de la proteína M2 (canal iónico) en el nucleo de el virion'},
+        {t:'Inhibición de la transcriptasa inversa'}]},
+  //3
+  {id:3, type:'mcq',q:'3. Dosis del aciclovir y valaciclovir en infecciones genitales iniciales',
+      opts:[
+        {t:'Aciclovir 200 mg 5/día x 7–10 días; Valaciclovir 1000 mg c/12 h x 7–10 días', correct:true},
+        {t:'Aciclovir 400 mg c/12h o 400 mg 3/día x 5 días; Valaciclovir 500 mg c/12 h x 5 días'},
+        {t:'Aciclovir 800 mg c8h por 14 días; Valaciclovir 1500 mg una vez al día por 10 días'},
+        {t:'Aciclovir 200 mg c/12h por 7 días; Valaciclovir 500 mg una vez/día por 7 días'}]},
+  // 4
+  { id:4, type:'mcq', q:'4. EA de Aciclovir y Valaciclovir',
+    opts:[
+      'Aciclovir: irritación, GI, nefro/neurotoxicidad. Valaciclovir: GI, cefalea, SNC, trombocitopenia.',
+      'Aciclovir: GI, cefalea, rash leve. Valaciclovir: GI, mareo, SNC, alteración hepática.',
+      'Aciclovir: cefalea, prurito, fatiga. Valaciclovir: GI, insomnio, erupción cutánea, cefalea.',
+      'Aciclovir: GI, visión borrosa, fiebre. Valaciclovir: GI, cefalea, leve hepatotoxicidad, náuseas.'
+    ],
+    correct:0
+  },
+  // 5
+  { id:5, type:'mcq', q:'5. Cidofovir – Usos y EA',
+    opts:[
+      'Usos: CMV, HSV resistente, verrugas/NIC. EA: nefrotoxicidad, irritación, potencial cancerígeno.',
+      'Usos: HSV, CMV, adenovirus. EA: GI, fiebre, nefrotoxicidad leve.',
+      'Usos: CMV, HSV ocular, varicela. EA: prurito, GI, alteración hepática.',
+      'Usos: CMV, HSV resistente, verrugas. EA: cefalea, nefrotoxicidad, mareo.'
+    ],
+    correct:0
+  },
+  // 6
+  { id:6, type:'mcq', q:'6. Famciclovir – Dosis',
+    opts:[
+      '250 mg cada 8 h por 7–10 días',
+      '200 mg cada 6 h por 10 días',
+      '400 mg cada 12 h por 5 días',
+      '500 mg cada 8 h por 7 días'
+    ],
+    correct:0
+  },
+  // 7
+  { id:7, type:'mcq', q:'7. Ganciclovir – Efectos adversos',
+    opts:[
+      'EA: mielosupresión, anemia, GI, leve hepato.',
+      'EA: leucopenia, cefalea, GI, leve rash.',
+      'EA: anemia, GI, fiebre, leve nefro.',
+      'EA: trombocitopenia, GI, cefalea, leve hepato.'
+    ],
+    correct:0
+  },
+  // 8
+  { id:8, type:'mcq', q:'8. Foscarnet – Usos terapéuticos',
+    opts:[
+      'Usos: CMV, HSV/VZV resistentes, Kaposi VIH.',
+      'Usos: CMV, HSV ocular, adenovirus, EBV.',
+      'Usos: HSV, influenza A, VZV, mononucleosis.',
+      'Usos: CMV, HSV, hepatitis, varicela.'
+    ],
+    correct:0
+  },
+  // 9
+  { id:9, type:'mcq', q:'9. Foscarnet – Efectos adversos',
+    opts:[
+      'EA: nefrotoxicidad, hipoCa, hipoMg/K, cefalea, convulsiones.',
+      'EA: nefrotoxicidad leve, rash, insomnio, cefalea.',
+      'EA: GI, hipocalcemia, fiebre, parestesias.',
+      'EA: hipocalcemia, GI leves, mareo, prurito.'
+    ],
+    correct:0
+  },
+  // 10
+  { id:10, type:'mcq', q:'10. CMV – Fármacos útiles',
+    opts:[
+      'Cidofovir, Fomivirsen, Ganciclovir, Valganciclovir, Foscarnet, Interferones.',
+      'Ganciclovir, Valganciclovir, Cidofovir, Ribavirina, Interferones, Remdesivir.',
+      'Foscarnet, Cidofovir, Ganciclovir, Zanamivir, Valaciclovir, Interferones.',
+      'Valganciclovir, Fomivirsen, Oseltamivir, Ribavirina, Cidofovir, Foscarnet.'
+    ],
+    correct:0
+  },
+  // 11
+  { id:11, type:'mcq', q:'11. Influenza – Fármacos',
+    opts:[
+      'Amantadina, Rimantadina, Oseltamivir, Zanamivir, Peramivir, Interferones.',
+      'Rimantadina, Oseltamivir, Zanamivir, Foscarnet, Cidofovir, Interferones.',
+      'Oseltamivir, Zanamivir, Peramivir, Amantadina, Foscarnet, Ribavirina.',
+      'Amantadina, Rimantadina, Cidofovir, Famciclovir, Peramivir, Interferones.'
+    ],
+    correct:0
+  },
+  // 12
+  { id:12, type:'mcq', q:'12. Amantadina / Rimantadina – Mecanismo de acción',
+    opts:[
+      'Bloquean M2 → impiden desnudamiento viral.',
+      'Inhiben neuraminidasa → evitan liberación viral.',
+      'Inhiben polimerasa → reducen replicación viral.',
+      'Inhiben fusión → limitan entrada celular.'
+    ],
+    correct:0
+  },
+  // 13
+  { id:13, type:'mcq', q:'13. Amantadina / Rimantadina – Usos terapéuticos',
+    opts:[
+      'Previenen y tratan influenza A; brotes hospitalarios.',
+      'Previenen influenza B; profilaxis varicela.',
+      'Tratan influenza A/B; prevención HSV.',
+      'Previenen hepatitis A; control varicela.'
+    ],
+    correct:0
+  },
+  // 14
+  { id:14, type:'mcq', q:'14. Amantadina / Rimantadina – Efectos adversos',
+    opts:[
+      'EA: nerviosismo, insomnio, GI, delirio, convulsiones, arritmias.',
+      'EA: cefalea, insomnio, GI leves, somnolencia, visión borrosa.',
+      'EA: GI, mareo, ansiedad, náuseas, rash leve.',
+      'EA: fatiga, alteración hepática, cefalea, vértigo, hipoNa.'
+    ],
+    correct:0
+  },
+  // 15
+  { id:15, type:'mcq', q:'15. Oseltamivir – Mecanismo de acción',
+    opts:[
+      'Inhibe neuraminidasa → bloquea diseminación viral.',
+      'Bloquea canal M2 → impide ensamblaje viral.',
+      'Inhibe polimerasa → detiene replicación viral.',
+      'Interfiere adhesión → limita infección viral.'
+    ],
+    correct:0
+  },
+  // 16
+  { id:16, type:'mcq', q:'16. Oseltamivir – Usos',
+    opts:[
+      'Tratamiento y profilaxis de influenza A y B.',
+      'Tratamiento influenza A y prevención RSV.',
+      'Profilaxis influenza B y varicela.',
+      'Prevención de hepatitis y resfriado viral.'
+    ],
+    correct:0
+  },
+  // 17
+  { id:17, type:'mcq', q:'17. Zanamivir – Usos y vía',
+    opts:[
+      'Influenza A/B; profilaxis familiar; vía inhalatoria.',
+      'Influenza B/CMV; tratamiento hospital; vía IV.',
+      'Influenza A/VZV; prevención; vía oral.',
+      'Influenza A/B; profilaxis nasal; vía tópica.'
+    ],
+    correct:0
+  },
+  // 18
+  { id:18, type:'mcq', q:'18. Zanamivir – Efectos adversos',
+    opts:[
+      'EA: broncoespasmo, sibilancias, disnea leve.',
+      'EA: tos seca, GI leves, cefalea leve.',
+      'EA: fiebre, mareo, disnea leve.',
+      'EA: tos leve, rinorrea, GI leves.'
+    ],
+    correct:0
+  },
+  // 19
+  { id:19, type:'mcq', q:'19. Peramivir – Efectos adversos',
+    opts:[
+      'EA: diarrea leve (>2%).',
+      'EA: GI leves, cefalea, insomnio, rash.',
+      'EA: náuseas, vómitos, mareo, fiebre.',
+      'EA: GI, artralgia, prurito, visión borrosa.'
+    ],
+    correct:0
+  },
+  // 20
+  { id:20, type:'mcq', q:'20. Interferones – Usos terapéuticos',
+    opts:[
+      'HBV/HCV, condilomas, Kaposi, EM, HSV.',
+      'HBV, HSV, influenza, EBV, varicela.',
+      'CMV, dengue, VIH, HPV, influenza.',
+      'HCV, HBV, HPV, mono, sarampión.'
+    ],
+    correct:0
   }
-  return c;
-}
+];
 
-function finished(){
-  return Object.keys(answers).length === getTopic().questions.length;
-}
+// === Utilidades
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const ABC=['a','b','c','d','e','f'];
+function normalize(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,' ')}
 
-function ensureOrder(){
-  const t=getTopic();
-  order = shuffle(t.questions.map((_,i)=>i));
-  idx = 0;
-  answers = {};
-  shuffledOptionsCache = {};
-}
+const quizEl=document.getElementById('quiz');
+const badge=document.getElementById('badgeCount');
+badge.textContent = `${QUESTIONS.length} preguntas`;
 
-function renderHeader(){
-  topicTitle.textContent = getTopic().title;
-  const total = getTopic().questions.length;
-  const correct = countCorrect();
-  const answered = Object.keys(answers).length;
-  progressInfo.textContent = `Progreso: ${answered}/${total} • Aciertos: ${correct}`;
-  prevBtn.disabled = idx===0;
-  nextBtn.disabled = idx===total-1;
-}
-
-function renderQuiz(){
-  quizArea.innerHTML = '';
-  const t=getTopic();
-  const total=t.questions.length;
-  if(finished()){
-    const correct = countCorrect();
-    const pct = Math.round(correct/total*100);
+function render(){
+  quizEl.innerHTML='';
+  QUESTIONS.forEach((q)=>{
     const card=document.createElement('div');
-    card.className='card center';
-    card.innerHTML = `<div class="score">${correct} / ${total}</div>
-      <div class="sub">Aciertos • ${pct}%</div>
-      <hr>
-      <button id="againBtn">Volver a intentar</button>`;
-    quizArea.appendChild(card);
-    document.getElementById('againBtn').addEventListener('click', ()=>{
-      ensureOrder(); render();
-    });
-    return;
-  }
+    card.className='card q';
+    const title=document.createElement('div');
+    title.className='q-title';
+    title.textContent=q.q;
+    card.appendChild(title);
 
-  const q=getCurrentQ();
-  const given = getAnswer(q);
+    if(q.type==='mcq'){
+      const optsEl=document.createElement('div');
+      optsEl.className='opts';
 
-  const card=document.createElement('div');
-  card.className='card';
-
-  const top=document.createElement('div');
-  top.className='topline';
-  const b1=document.createElement('span'); b1.className='badge'; b1.textContent=`Pregunta ${idx+1} / ${total}`;
-  const b2=document.createElement('span'); b2.className='badge'; b2.textContent= q.type==='mcq' ? 'Opción múltiple' : q.type==='tf' ? 'V/F' : 'Completar';
-  top.appendChild(b1); top.appendChild(b2);
-  card.appendChild(top);
-
-  const title=document.createElement('div');
-  title.className='qtitle';
-  title.textContent = q.q;
-  card.appendChild(title);
-
-  if(q.type==='mcq'){
-    // cache de opciones barajadas por pregunta
-    if(!shuffledOptionsCache[q.id]){
-      shuffledOptionsCache[q.id] = shuffle(q.options.map((opt,i)=>({i,opt})));
-    }
-    const list=document.createElement('div');
-    list.className='options';
-    for(const {i,opt} of shuffledOptionsCache[q.id]){
-      const btn=document.createElement('button');
-      btn.className='opt';
-      btn.textContent = opt;
-      if(given!==undefined){
-        if(given===i) btn.classList.add(isCorrect(q,given)?'correct':'wrong');
-        if(q.answer===i) btn.classList.add('correct');
-        btn.disabled = true;
-      }else{
-        btn.addEventListener('click', ()=> setAnswer(q, i));
-      }
-      list.appendChild(btn);
-    }
-    card.appendChild(list);
-  }
-  else if(q.type==='tf'){
-    const wrap=document.createElement('div'); wrap.className='vf';
-    for(const val of [true,false]){
-      const btn=document.createElement('button');
-      btn.textContent = val ? 'Verdadero' : 'Falso';
-      btn.className='opt';
-      if(given!==undefined){
-        if(given===val) btn.classList.add(isCorrect(q,given)?'correct':'wrong');
-        if(q.answer===val) btn.classList.add('correct');
-        btn.disabled = true;
-      }else{
-        btn.addEventListener('click', ()=> setAnswer(q, val));
-      }
-      wrap.appendChild(btn);
-    }
-    card.appendChild(wrap);
-  }
-  else if(q.type==='fill'){
-    const input=document.createElement('input');
-    input.type='text'; input.placeholder='Escribe tu respuesta';
-    const btn=document.createElement('button'); btn.textContent='Comprobar'; btn.style.marginTop='10px';
-    const wrap=document.createElement('div');
-    wrap.appendChild(input); wrap.appendChild(btn);
-    card.appendChild(wrap);
-
-    if(given!==undefined){
-      input.value = given;
-      input.disabled = true; btn.disabled = true;
-    }else{
-      btn.addEventListener('click', ()=>{
-        if(!input.value.trim()) return;
-        setAnswer(q, input.value);
+      // 👇 Normaliza opciones: soporte para strings u objetos,
+      // y marca cuál es correcta ANTES de mezclar.
+      const normalized = q.opts.map((opt,i)=>{
+        if(typeof opt === 'string'){
+          return { t: opt, correct: i === q.correct };
+        } else {
+          // ya viene como {t, correct}
+          return { t: opt.t, correct: !!opt.correct || i === q.correct };
+        }
       });
-    }
-  }
 
-  if(given!==undefined){
-    const ok = isCorrect(q, given);
-    const fb=document.createElement('div');
-    fb.className = 'sub ' + (ok ? 'ok' : 'bad');
-    fb.textContent = ok ? '¡Correcto!' : (
-      q.type==='fill' ? `Incorrecto. Respuesta: ${q.answer}` :
-      q.type==='tf' ? `Incorrecto. Respuesta: ${q.answer ? 'Verdadero' : 'Falso'}` :
-      `Incorrecto. Respuesta: ${q.options[q.answer]}`
-    );
-    card.appendChild(fb);
-    if(q.expl){
-      const ex=document.createElement('div'); ex.className='expl'; ex.textContent=q.expl; card.appendChild(ex);
-    }
-  }
+      const mixed=shuffle(normalized);
 
-  quizArea.appendChild(card);
+      mixed.forEach((opt,idx)=>{
+        const label=document.createElement('label');
+        label.className='opt';
+        const input=document.createElement('input');
+        input.type='radio';
+        input.name='q'+q.id;
+        if(opt.correct) input.dataset.correct='true';
+        label.appendChild(input);
+        const span=document.createElement('span');
+        span.textContent=`${ABC[idx]}) ${opt.t}`;
+        span.title=opt.t;
+        label.appendChild(span);
+        optsEl.appendChild(label);
+      });
+      card.appendChild(optsEl);
+    }
+    else if(q.type==='vf'){
+      const opts=document.createElement('div');
+      opts.className='opts';
+      ['Verdadero','Falso'].forEach((txt,idx)=>{
+        const label=document.createElement('label');
+        label.className='opt';
+        const input=document.createElement('input');
+        input.type='radio';
+        input.name='q'+q.id;
+        if((q.correct||'').toLowerCase()===txt.toLowerCase()) input.dataset.correct='true';
+        label.appendChild(input);
+        const span=document.createElement('span');
+        span.textContent=`${ABC[idx]}) ${txt}`;
+        label.appendChild(span);
+        opts.appendChild(label);
+      });
+      card.appendChild(opts);
+    }
+    else if(q.type==='fill'){
+      const inp=document.createElement('input');
+      inp.className='fillin';
+      inp.placeholder='Escribe la(s) palabra(s) exacta(s)';
+      inp.name='q'+q.id;
+      card.appendChild(inp);
+    }
+    quizEl.appendChild(card);
+  });
 }
 
-function render(){ renderHeader(); renderQuiz(); }
+render();
 
-// Eventos
-topicSelect.addEventListener('change', (e)=>{
-  topicKey = e.target.value;
-  ensureOrder(); render();
+// === Calificar
+document.getElementById('grade').addEventListener('click',()=>{
+  const cards=[...document.querySelectorAll('.card')];
+  let correct=0;
+  cards.forEach((card,idx)=>{
+    const q=QUESTIONS[idx];
+    card.querySelectorAll('.opt, .fillin').forEach(el=>el.classList.remove('correct','incorrect'));
+    const prev=card.querySelector('.result'); if(prev) prev.remove();
+    let ok=false;
+    if(q.type==='mcq' || q.type==='vf'){
+      const chosen=card.querySelector('input:checked');
+      const labels=card.querySelectorAll('.opt');
+      labels.forEach(l=>{const inp=l.querySelector('input'); if(inp.dataset.correct==='true') l.classList.add('correct');});
+      if(chosen){ if(chosen.dataset.correct==='true') ok=true; else chosen.closest('.opt').classList.add('incorrect'); }
+    } else if(q.type==='fill'){
+      const inp=card.querySelector('input.fillin');
+      const ans=normalize(inp.value);
+      const target=Array.isArray(q.correct)? q.correct.map(normalize): [normalize(q.correct)];
+      if(target.some(t=>t===ans)) { ok=true; inp.classList.add('correct'); } else { inp.classList.add('incorrect'); }
+    }
+    if(ok) correct++;
+    const res=document.createElement('div');
+    res.className='result ' + (ok? '' : 'bad');
+    res.textContent= ok? '✔ Correcto' : '✘ Incorrecto';
+    card.appendChild(res);
+  });
+  const sum=document.getElementById('summary');
+  sum.innerHTML=`<div class="card"><strong>Puntuación:</strong> ${correct} / ${QUESTIONS.length} (${Math.round(correct/QUESTIONS.length*100)}%)</div>`;
 });
-prevBtn.addEventListener('click', ()=>{ idx = Math.max(0, idx-1); render(); });
-nextBtn.addEventListener('click', ()=>{ idx = Math.min(getTopic().questions.length-1, idx+1); render(); });
-restartBtn.addEventListener('click', ()=>{ ensureOrder(); render(); });
 
-// Start
-ensureOrder(); render();
+// Reiniciar
+document.getElementById('reset').addEventListener('click',()=>{
+  render();
+  document.getElementById('summary').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// Mostrar respuestas
+document.getElementById('reveal').addEventListener('click',()=>{
+  const cards=[...document.querySelectorAll('.card')];
+  cards.forEach((card)=>{
+    const correctInput=card.querySelector('input[data-correct=true]');
+    if(correctInput) correctInput.checked=true;
+    card.querySelectorAll('.opt').forEach(l=>{
+      const inp=l.querySelector('input');
+      if(inp.dataset.correct==='true') l.classList.add('correct');
+    });
+  });
+});
 </script>
 </body>
 </html>
