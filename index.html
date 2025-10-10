@@ -44,10 +44,14 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Cuestionario Interactivo #1 – Fármacos Antivirales</h1>
+        <h1 id="title">#1 Antivirales</h1>
         <div class="meta">PRACTICA</div>
       </div>
       <div class="badge" id="badgeCount"></div>
+      <nav style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap">
+  <button class="secondary" id="btnAntivirales">Antivirales</button>
+  <button class="secondary" id="btnAntirretrovirales">Antirretrovirales</button>
+</nav>
     </header>
 
     <noscript>Este cuestionario requiere JavaScript habilitado.</noscript>
@@ -260,6 +264,150 @@ const QUESTIONS = [
     correct:0
   }
 ];
+// Copia del cuestionario actual para el botón “Antivirales”
+const ANTIVIRALES = JSON.parse(JSON.stringify(QUESTIONS));
+// === CUESTIONARIO #2 – ANTIRRETROVIRALES ===
+const ANTIRRETROVIRALES = [
+  {id:1,type:'mcq',q:'1. Grupos principales de antirretrovirales',opts:[
+    'ITIN, ITINN, IP, IE, II.',
+    'Penicilinas, cefalosporinas, IP, II, IE.',
+    'ITIN, ITINN, antifúngicos, IE, II.',
+    'ITIN, macrólidos, IE, IP, antivirales tópicos.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. ITIN – Fármacos',opts:[
+    'Zidovudina, Lamivudina, Tenofovir, Abacavir, Didanosina.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina, Indinavir.',
+    'Ritonavir, Darunavir, Fosamprenavir, Lopinavir, Atazanavir.',
+    'Raltegravir, Dolutegravir, Elvitegravir, Bictegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. ITINN – Fármacos',opts:[
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina.',
+    'Zidovudina, Lamivudina, Abacavir, Tenofovir.',
+    'Indinavir, Ritonavir, Lopinavir, Darunavir.',
+    'Raltegravir, Dolutegravir, Bictegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Inhibidores de la proteasa',opts:[
+    'Ritonavir, Darunavir, Atazanavir, Lopinavir, Fosamprenavir.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina, Indinavir.',
+    'Zidovudina, Abacavir, Lamivudina, Tenofovir, Atazanavir.',
+    'Raltegravir, Elvitegravir, Bictegravir, Dolutegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Inhibidores de integrasa',opts:[
+    'Raltegravir, Dolutegravir, Elvitegravir, Bictegravir.',
+    'Ritonavir, Darunavir, Indinavir, Fosamprenavir.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina.',
+    'Zidovudina, Lamivudina, Tenofovir, Abacavir.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Objetivo del tratamiento TARV',opts:[
+    'Suprimir VIH, restaurar inmunidad, evitar progresión.',
+    'Aumentar replicación viral, inducir respuesta.',
+    'Reducir síntomas sin eliminar el virus.',
+    'Estimular anticuerpos sin antivirales.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Fracaso terapéutico',opts:[
+    'Reaparición de carga viral o falta de respuesta.',
+    'EA leve o toxicidad GI por fármaco.',
+    'Disminución CD4 sin aumento viral.',
+    'Cambio de esquema sin razón médica.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Zidovudina – Efectos adversos',opts:[
+    'EA: anemia, neutropenia, GI, cefalea, miopatía.',
+    'EA: cefalea, mialgia, GI, rash, fatiga.',
+    'EA: hepatotoxicidad, insomnio, GI, tos, mareo.',
+    'EA: anemia, prurito, cefalea, visión, GI.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. Abacavir – Efectos adversos',opts:[
+    'EA: hipersensibilidad, fiebre, GI, rash leve.',
+    'EA: anemia, cefalea, GI, mialgia, visión.',
+    'EA: hiperlipidemia, cefalea, GI, rash leve.',
+    'EA: GI, tos, erupción leve, mareo.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Didanosina – Efectos adversos',opts:[
+    'EA: pancreatitis, neuropatía, GI, hiperuricemia.',
+    'EA: neuropatía, GI, hepatotoxicidad, rash leve.',
+    'EA: anemia, GI, cefalea, mialgia.',
+    'EA: diarrea, insomnio, GI, parestesias.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Nevirapina – Efectos adversos',opts:[
+    'EA: rash, hepatotoxicidad, fiebre, GI.',
+    'EA: anemia, neuropatía, rash leve, tos.',
+    'EA: GI, cefalea, fiebre, prurito.',
+    'EA: insomnio, erupción leve, GI, rash.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Ritonavir – Efectos adversos',opts:[
+    'EA: GI, hiperlipidemia, parestesias, transaminasas ↑.',
+    'EA: GI, rash, mialgia, leve nefro.',
+    'EA: anemia, GI, cefalea, leve hepato.',
+    'EA: GI, astenia, insomnio, parestesias.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Efavirenz – Efectos adversos',opts:[
+    'EA: mareo, insomnio, sueños vívidos, GI.',
+    'EA: cefalea, somnolencia, GI, rash.',
+    'EA: fiebre, astenia, insomnio, GI.',
+    'EA: visión borrosa, cefalea, GI, prurito.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Activos contra VIH y VHB',opts:[
+    'Tenofovir y Lamivudina.',
+    'Zidovudina y Abacavir.',
+    'Efavirenz y Nevirapina.',
+    'Ritonavir y Darunavir.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Principio de terapia combinada',opts:[
+    'Uso ≥3 fármacos distintos para evitar resistencia.',
+    'Uso 2 fármacos idénticos para mayor potencia.',
+    'Alternar 1 antiviral y 1 antibiótico semanal.',
+    'Usar un solo fármaco con dosis altas.'
+  ],correct:0},
+
+  {id:16,type:'mcq',q:'16. Esquema preferido en El Salvador',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir.',
+    'Zidovudina + Efavirenz + Lopinavir.',
+    'Abacavir + Ritonavir + Rilpivirina.',
+    'Lamivudina + Atazanavir + Nevirapina.'
+  ],correct:0},
+
+  {id:17,type:'mcq',q:'17. Uso pediátrico',opts:[
+    'Dosis por peso, preferir Zidovudina o Abacavir.',
+    'Igual dosis que adultos sin ajuste.',
+    'Evitar TARV antes de 12 años.',
+    'Usar solo inhibidor de proteasa.'
+  ],correct:0},
+
+  {id:18,type:'mcq',q:'18. Embarazo – esquema preferido',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir.',
+    'Zidovudina + Efavirenz + Lopinavir.',
+    'Abacavir + Nevirapina + Raltegravir.',
+    'Lamivudina + Atazanavir + Rilpivirina.'
+  ],correct:0},
+
+  {id:19,type:'mcq',q:'19. Profilaxis post exposición',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir 28 días.',
+    'Abacavir + Zidovudina + Efavirenz 14 días.',
+    'Tenofovir + Nevirapina + Lopinavir 10 días.',
+    'Lamivudina + Ritonavir + Atazanavir 21 días.'
+  ],correct:0},
+
+  {id:20,type:'mcq',q:'20. Inhibidores de integrasa – uso clínico',opts:[
+    'Supresión viral potente, inicio o rescate, buena tolerancia.',
+    'Solo en casos multirresistentes o refractarios.',
+    'En monoterapia corta.',
+    'En combinación con antibióticos.'
+  ],correct:0}
+];
 
 // === Utilidades
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -380,6 +528,25 @@ document.getElementById('reset').addEventListener('click',()=>{
   document.getElementById('summary').innerHTML='';
   window.scrollTo({top:0,behavior:'smooth'});
 });
+// ======= Cambio de cuestionario por menú =======
+const titleEl = document.getElementById('title');
+
+function setModule(nombre, data){
+  const clone = JSON.parse(JSON.stringify(data));
+  QUESTIONS.splice(0, QUESTIONS.length, ...clone);
+  titleEl.textContent = `Cuestionario Interactivo – Fármacos ${nombre}`;
+  badge.textContent = `${QUESTIONS.length} preguntas`;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('btnAntivirales').addEventListener('click', ()=>{
+  setModule('Antivirales', ANTIVIRALES);
+});
+
+document.getElementById('btnAntirretrovirales').addEventListener('click', ()=>{
+  setModule('Antirretrovirales', ANTIRRETROVIRALES);
+});
 
 // Mostrar respuestas
 document.getElementById('reveal').addEventListener('click',()=>{
@@ -393,6 +560,7 @@ document.getElementById('reveal').addEventListener('click',()=>{
     });
   });
 });
+
 </script>
 </body>
 </html>
