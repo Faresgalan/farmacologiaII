@@ -19,7 +19,13 @@
     .opts{display:grid;gap:8px;margin-top:6px}
     .opt{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:10px 12px;border-radius:12px;cursor:pointer}
     .opt input{margin-top:3px}
-    .opt span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .opt span{
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden
+    }
     .fillin{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.2);color:var(--ink)}
     .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px}
     button{background:var(--accent);border:none;color:#00232c;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
@@ -38,10 +44,22 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Cuestionario Interactivo #1 – Fármacos Antivirales</h1>
+        <h1 id="title">#1 Antivirales</h1>
         <div class="meta">PRACTICA</div>
       </div>
       <div class="badge" id="badgeCount"></div>
+      <nav style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap">
+  <button class="secondary" id="btnAntivirales">Antivirales</button>
+  <button class="secondary" id="btnAntirretrovirales">Antirretrovirales</button>
+  <button class="secondary" id="btnAntimicoticos">Antimicóticos</button>
+   <button class="secondary" id="btnEndocrino">Endocrino</button>
+      <button class="secondary" id="btnACTH">ACTH</button>
+      <button class="secondary" id="btnDiabetes">DIABETES</button>
+      <button class="secondary" id="btnandrogenos">Androgenos</button>
+      <button class="secondary" id="btnEstrogenos">Estrogenos</button>
+      <button class="secondary" id="btnRecambioOseo">Recambio Oseo</button>
+      <button class="secondary" id="btnHematopoyesis">Hematopoyesis</button>
+</nav>
     </header>
 
     <noscript>Este cuestionario requiere JavaScript habilitado.</noscript>
@@ -54,12 +72,510 @@
     </div>
 
     <div id="summary" aria-live="polite"></div>
+    <!-- ====== CUADRO INTERACTIVO PARA TABLAS (Q6, Q7, Q9, Q14) ====== -->
+<section class="card" id="matcher-root" style="margin-top:16px; display:none">
+  <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <strong>Práctica de tablas (emparejamientos)</strong>
+    <div class="badge">Q6 · Q7 · Q9 · Q14</div>
+  </div>
+  <p class="meta" style="margin:8px 0 14px">
+    Empareja el <em>número</em> (izquierda) con la <em>letra</em> correcta (derecha). 
+    Toca el selector para elegir.
+  </p>
+
+  <div id="matcher-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+  <div id="matcher"></div>
+
+  <div class="actions" style="margin-top:14px">
+    <button id="matcher-grade">Calificar</button>
+    <button class="secondary" id="matcher-reset">Reiniciar</button>
+    <span id="matcher-score" class="badge"></span>
+  </div>
+</section>
+<!-- ====== MATCH Andrógenos – P4 (efectos por etapas) ====== -->
+<section class="card" id="matcher-andro-root" style="margin-top:16px; display:none">
+  <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <strong>Andrógenos · P4 (emparejamientos)</strong>
+    <div class="badge">Efectos de testosterona por etapa</div>
+  </div>
+  <p class="meta" style="margin:8px 0 14px">
+    Empareja el <em>número</em> (izquierda) con la <em>letra</em> correcta (derecha).
+  </p>
+
+  <div id="matcher-andro-bank"></div>
+  <div id="matcher-andro"></div>
+
+  <div class="actions" style="margin-top:14px">
+    <button id="matcher-andro-grade">Calificar</button>
+    <button class="secondary" id="matcher-andro-reset">Reiniciar</button>
+    <span id="matcher-andro-score" class="badge"></span>
+  </div>
+</section>
+<!-- ====== MATCH Estrógenos – P6 (emparejamientos) ====== -->
+<section class="card" id="matcher-est-root" style="margin-top:16px; display:none">
+  <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <strong>Estrógenos/Progestinas · P6 (emparejamientos)</strong>
+    <div class="badge">Fármacos por grupo</div>
+  </div>
+  <p class="meta" style="margin:8px 0 14px">
+    Empareja el <em>número</em> (izquierda) con la <em>letra</em> correcta (derecha).
+  </p>
+
+  <div id="matcher-est-bank"></div>
+  <div id="matcher-est"></div>
+
+  <div class="actions" style="margin-top:14px">
+    <button id="matcher-est-grade">Calificar</button>
+    <button class="secondary" id="matcher-est-reset">Reiniciar</button>
+    <span id="matcher-est-score" class="badge"></span>
+  </div>
+</section>
+<script>
+// ===== Banco de emparejamientos P6 (del cuadro del PDF, sintetizado) =====
+const MATCH_EST_Q6 = {
+  left: [
+    '1) Estrógenos naturales',
+    '2) Estrógenos sintéticos',
+    '3) SERM',
+    '4) Antiestrógenos',
+    '5) Inhibidores de aromatasa',
+    '6) Progestinas 1ª gen',
+    '7) Progestinas 2ª gen',
+    '8) SPRM'
+  ],
+  right: [
+    'A) Estradiol, estrona, estriol',
+    'B) Etinilestradiol, mestranol, dietilestilbestrol',
+    'C) Tamoxifeno, raloxifeno, toremifeno',
+    'D) Fulvestrant, clomifeno',
+    'E) Anastrozol, letrozol, exemestano',
+    'F) Noretisterona, linestrenol',
+    'G) Levonorgestrel, norgestrel, desogestrel',
+    'H) Ulipristal, mifepristona'
+  ]
+};
+
+// ===== Lógica del mini-widget (similar al de Andrógenos) =====
+(function(){
+  const root = document.getElementById('matcher-est');
+  const bank = document.getElementById('matcher-est-bank');
+  const score = document.getElementById('matcher-est-score');
+  if(!root || !bank) return;
+
+  const AB='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const shuffle = (arr)=>{const a=arr.map((t,i)=>({t,i}));for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;};
+
+  let rightMixed = shuffle(MATCH_EST_Q6.right);
+  let answers = Array(MATCH_EST_Q6.left.length).fill('');
+
+  function render(){
+    score.textContent = '';
+    // banco derecha
+    bank.innerHTML = '<strong>Banco de respuestas</strong>';
+    const ul = document.createElement('ul');
+    ul.style.listStyle='none'; ul.style.padding='0'; ul.style.margin='8px 0 12px 0';
+    rightMixed.forEach((obj,k)=>{
+      const li=document.createElement('li');
+      li.style.padding='6px 8px';
+      li.style.border='1px solid rgba(255,255,255,.12)';
+      li.style.borderRadius='10px';
+      li.style.margin='6px 0';
+      li.textContent = `${AB[k]}) ${obj.t}`;
+      ul.appendChild(li);
+    });
+    bank.appendChild(ul);
+
+    // tabla izquierda
+    root.innerHTML='';
+    const grid=document.createElement('div');
+    grid.style.display='grid';
+    grid.style.gridTemplateColumns='minmax(180px,1fr) 120px';
+    grid.style.gap='8px';
+
+    MATCH_EST_Q6.left.forEach((txt,idx)=>{
+      const label = document.createElement('div'); label.textContent = txt;
+      const sel = document.createElement('select'); sel.className='fillin'; sel.style.padding='8px';
+      const def=document.createElement('option'); def.value=''; def.textContent='—'; sel.appendChild(def);
+      rightMixed.forEach((_,k)=>{const op=document.createElement('option'); op.value=k; op.textContent=AB[k]; sel.appendChild(op);});
+      sel.value = answers[idx];
+      sel.addEventListener('change',()=>{answers[idx]=sel.value;});
+      grid.appendChild(label); grid.appendChild(sel);
+    });
+
+    root.appendChild(grid);
+  }
+
+  render();
+
+  document.getElementById('matcher-est-grade').addEventListener('click',()=>{
+    let correct=0, total=MATCH_EST_Q6.left.length;
+    MATCH_EST_Q6.left.forEach((_,i)=>{
+      const selIndex = answers[i];
+      if(selIndex==='') return;
+      const originalIndex = rightMixed[Number(selIndex)].i;
+      if(originalIndex === i) correct++;
+    });
+    const pct=Math.round(correct/total*100);
+    score.textContent = `Puntuación: ${correct}/${total} (${pct}%)`;
+
+    const selects = document.querySelectorAll('#matcher-est select.fillin');
+    selects.forEach((sel,i)=>{
+      sel.classList.remove('correct','incorrect');
+      if(sel.value==='') return;
+      const originalIndex = rightMixed[Number(sel.value)].i;
+      sel.classList.add(originalIndex===i ? 'correct' : 'incorrect');
+    });
+  });
+
+  document.getElementById('matcher-est-reset').addEventListener('click',()=>{
+    rightMixed = shuffle(MATCH_EST_Q6.right);
+    answers = Array(MATCH_EST_Q6.left.length).fill('');
+    render();
+  });
+})();
+</script>
+
+<script>
+// ===== Contenido de P4 según tu PDF (sintetizado y exacto) =====
+const MATCH_ANDRO_Q4 = {
+  left: [
+    '1) Útero',
+    '2) Infancia',
+    '3) Pubertad',
+    '4) Adultez',
+    '5) Senescencia'
+  ],
+  right: [
+    'A) Diferenciación de epidídimo, conducto deferente y vesículas seminales; DHT → genitales externos',
+    'B) Incremento de la secreción de testosterona testicular',
+    'C) ↑ GnRH/LH/FSH → ↑ testosterona; maduración túbulos seminíferos; cambios: vello, ↑ masa/fuerza y densidad ósea',
+    'D) Mantiene caracteres sexuales, masa/fuerza y densidad ósea; calvicie patrón, HPB y riesgo Ca próstata (vía T/DHT)',
+    'E) ↓ testosterona y ↑ SHBG → ↓ T libre: ↓ masa/fuerza/ósea, libido y energía; ↑ grasa y riesgo metabólico'
+  ]
+};
+
+// ===== Lógica del pequeño widget (solo para Andrógenos P4) =====
+(function(){
+  const root = document.getElementById('matcher-andro');
+  const bank = document.getElementById('matcher-andro-bank');
+  const score = document.getElementById('matcher-andro-score');
+  if(!root || !bank) return;
+
+  // Utilidad
+  const AB='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const shuffle = (arr)=>{const a=arr.map((t,i)=>({t,i}));for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;};
+
+  // Estado
+  let rightMixed = shuffle(MATCH_ANDRO_Q4.right);
+  let answers = Array(MATCH_ANDRO_Q4.left.length).fill('');
+
+  // Render banco (letras) y filas (números)
+  function render(){
+    score.textContent = '';
+
+    // Banco letras (derecha)
+    bank.innerHTML = '<strong>Banco de respuestas</strong>';
+    const ul = document.createElement('ul');
+    ul.style.listStyle='none'; ul.style.padding='0'; ul.style.margin='8px 0 12px 0';
+    rightMixed.forEach((obj,k)=>{
+      const li=document.createElement('li');
+      li.style.padding='6px 8px';
+      li.style.border='1px solid rgba(255,255,255,.12)';
+      li.style.borderRadius='10px';
+      li.style.margin='6px 0';
+      li.textContent = `${AB[k]}) ${obj.t}`;
+      ul.appendChild(li);
+    });
+    bank.appendChild(ul);
+
+    // Tabla izquierda (números con select)
+    root.innerHTML='';
+    const grid=document.createElement('div');
+    grid.style.display='grid';
+    grid.style.gridTemplateColumns='minmax(160px,1fr) 120px';
+    grid.style.gap='8px';
+
+    MATCH_ANDRO_Q4.left.forEach((txt,idx)=>{
+      const label = document.createElement('div');
+      label.textContent = txt;
+
+      const sel = document.createElement('select');
+      sel.className='fillin';
+      sel.style.padding='8px';
+      const def=document.createElement('option'); def.value=''; def.textContent='—'; sel.appendChild(def);
+      rightMixed.forEach((_,k)=>{const op=document.createElement('option'); op.value=k; op.textContent=AB[k]; sel.appendChild(op);});
+      sel.value = answers[idx];
+      sel.addEventListener('change',()=>{answers[idx]=sel.value;});
+      grid.appendChild(label); grid.appendChild(sel);
+    });
+
+    root.appendChild(grid);
+  }
+
+  render();
+
+  // Calificar
+  document.getElementById('matcher-andro-grade').addEventListener('click',()=>{
+    let correct=0, total=MATCH_ANDRO_Q4.left.length;
+    // clave correcta: 1↔A (índice 0), 2↔B (1), etc.
+    MATCH_ANDRO_Q4.left.forEach((_,i)=>{
+      const selIndex = answers[i];
+      if(selIndex==='') return;
+      const originalIndex = rightMixed[Number(selIndex)].i;
+      if(originalIndex === i) correct++;
+    });
+    const pct=Math.round(correct/total*100);
+    score.textContent = `Puntuación: ${correct}/${total} (${pct}%)`;
+
+    // pinta selects
+    const selects = document.querySelectorAll('#matcher-andro select.fillin');
+    selects.forEach((sel,i)=>{
+      sel.classList.remove('correct','incorrect');
+      if(sel.value==='') return;
+      const originalIndex = rightMixed[Number(sel.value)].i;
+      sel.classList.add(originalIndex===i ? 'correct' : 'incorrect');
+    });
+  });
+
+  // Reiniciar
+  document.getElementById('matcher-andro-reset').addEventListener('click',()=>{
+    rightMixed = shuffle(MATCH_ANDRO_Q4.right);
+    answers = Array(MATCH_ANDRO_Q4.left.length).fill('');
+    render();
+  });
+})();
+</script>
+
+<script>
+// =================== EMPAREJAMIENTOS – CONTENIDO REAL ===================
+const MATCHERS = [
+  // Q6 – Acción de los corticosteroides por sistema
+  {
+    id: 'Q6',
+    title: 'Acción de los corticosteroides por sistema',
+    left: [
+      '1) Metab. carbohidratos/proteínas',
+      '2) Metab. lípidos',
+      '3) Balance agua y electrolitos',
+      '4) Sistema cardiovascular',
+      '5) Músculo esquelético',
+      '6) Sistema nervioso central',
+      '7) Sangre',
+      '8) Acción antiinflamatoria/inmunosupresora'
+    ],
+    right: [
+      'A) ↑ gluconeogénesis/↑ glucógeno hepático; ↑ glucosa',
+      'B) Redistribución grasa (Cushing); efecto permisivo lipólisis',
+      'C) Mineraloc.: ↑ reabsorción Na+; ↑ excreción K+/H+',
+      'D) Aldosterona: HTA y fibrosis intersticial (efectos directos)',
+      'E) GC prolongados: miopatía/atrofia; ↓ trabajo muscular',
+      'F) Cambios de ánimo, conducta y ↑ excitabilidad',
+      'G) Efectos menores sobre sangre',
+      'H) Inhiben mediadores; ↓ citocinas proinflamatorias'
+    ]
+  },
+
+  // Q7 – Corticoides del cuadro y su presentación (síntesis)
+  {
+    id: 'Q7',
+    title: 'Corticoides y presentaciones',
+    left: [
+      '1) Hidrocortisona',
+      '2) Prednisona',
+      '3) Prednisolona',
+      '4) Metilprednisolona',
+      '5) Dexametasona',
+      '6) Betametasona',
+      '7) Triamcinolona',
+      '8) Fludrocortisona',
+      '9) Beclometasona',
+      '10) Budesonida',
+      '11) Mometasona',
+      '12) Clobetasol'
+    ],
+    right: [
+      'A) VO, IV, tópica (glucocorticoide)',
+      'B) VO (glucocorticoide)',
+      'C) VO, oftálmica, tópica (glucocorticoide)',
+      'D) VO, IV, IM, tópica (glucocorticoide)',
+      'E) VO, IV, IM, oftálmica, tópica (glucocorticoide)',
+      'F) IM, tópica, oftálmica (glucocorticoide)',
+      'G) IM, tópica, intranasal, oftálmica (glucocorticoide)',
+      'H) VO (mineralocorticoide)',
+      'I) Inhalatoria, intranasal (glucocorticoide)',
+      'J) Inhalatoria; VO en EII (glucocorticoide)',
+      'K) Inhalatoria, intranasal, tópica (glucocorticoide)',
+      'L) Tópica (alta potencia) (glucocorticoide)'
+    ]
+  },
+
+  // Q9 – Afectación por dosis suprrafisiológicas de glucocorticoides
+  {
+    id: 'Q9',
+    title: 'Afectación por dosis suprrafisiológicas',
+    left: [
+      '1) Endocrino',
+      '2) Cardiovascular',
+      '3) Inmunológico',
+      '4) Gastrointestinal',
+      '5) Músculo-esquelético',
+      '6) Ocular',
+      '7) Sistema nervioso',
+      '8) Respiratorio',
+      '9) Osteoarticular',
+      '10) Crecimiento/desarrollo'
+    ],
+    right: [
+      'A) Supresión del eje HPA',
+      'B) ↑ PA (HTA/vasoconstricción)',
+      'C) Susceptibilidad a infecciones (inmunosupresión)',
+      'D) Riesgo de úlceras pépticas',
+      'E) Osteoporosis y miopatía esteroidea',
+      'F) Cataratas dependientes de dosis/tiempo (peor en niños)',
+      'G) Cambios de ánimo y comportamiento',
+      'H) Deterioro por miopatía de músculos respiratorios',
+      'I) Osteonecrosis/necrosis avascular',
+      'J) Detienen el crecimiento en niños'
+    ]
+  },
+
+  // Q14 – Usos terapéuticos en enfermedades no reumáticas
+  {
+    id: 'Q14',
+    title: 'Usos en enfermedades no reumáticas',
+    left: [
+      '1) Renales',
+      '2) Alérgicas',
+      '3) Pulmonares',
+      '4) Infecciosas',
+      '5) Oculares',
+      '6) Dermatológicas',
+      '7) Gastrointestinales',
+      '8) Hepáticas',
+      '9) Malignidades',
+      '10) Neurológicas',
+      '11) Sarcoidosis',
+      '12) Hematológicas',
+      '13) Trasplante de órganos',
+      '14) Médula espinal'
+    ],
+    right: [
+      'A) Sd. nefrótico cambios mínimos; lupus renal; GN membranosa',
+      'B) Fiebre del heno, urticaria, dermatitis, enfermedad del suero, picaduras, edema angioneurótico',
+      'C) Asma bronquial; trabajo de parto prematuro',
+      'D) Neumonía por Pneumocystis (VIH); meningitis por H. influenzae b',
+      'E) Inflamación ocular',
+      'F) Dermatitis, pénfigo, psoriasis, urticaria',
+      'G) Colitis ulcerosa; enfermedad de Crohn',
+      'H) Hepatitis autoinmune; hepatopatía alcohólica',
+      'I) LLA, linfomas; en quimioterapia con taxanos',
+      'J) Edema cerebral por neoplasias o parásitos',
+      'K) Formas graves o debilitantes',
+      'L) PTI, anemia hemolítica autoinmune',
+      'M) Inmunosupresión en cirugía de trasplante',
+      'N) Lesión aguda medular'
+    ]
+  }
+];
+
+// Muestra el recuadro de emparejamientos solo en ACTH
+function toggleMatcherFor(moduleArray){
+  // ACTH (si ya lo usas)
+  const mACTH = document.getElementById('matcher-root');
+  if (mACTH){
+    if (typeof ACTH !== 'undefined' && moduleArray === ACTH){
+      mACTH.style.display = '';
+      document.getElementById('matcher-reset')?.click();
+    } else {
+      mACTH.style.display = 'none';
+    }
+  }
+
+  // ANDRÓGENOS (nuevo)
+  const mAND = document.getElementById('matcher-andro-root');
+  if (mAND){
+    if (typeof ANDROGENOS !== 'undefined' && moduleArray === ANDROGENOS){
+      mAND.style.display = '';
+      document.getElementById('matcher-andro-reset')?.click();
+    } else {
+      mAND.style.display = 'none';
+    }
+  }
+
+  // ESTRÓGENOS (nuevo)  ← ESTE BLOQUE DEBE IR DENTRO DE LA FUNCIÓN
+  const mEST = document.getElementById('matcher-est-root');
+  if (mEST){
+    if (typeof ESTROGENOS !== 'undefined' && moduleArray === ESTROGENOS){
+      mEST.style.display = '';
+      document.getElementById('matcher-est-reset')?.click();
+    } else {
+      mEST.style.display = 'none';
+    }
+  }
+}
+
+// =================== LÓGICA DEL WIDGET ===================
+(function(){
+  const root = document.getElementById('matcher');
+  const tabs = document.getElementById('matcher-tabs');
+  const scoreEl = document.getElementById('matcher-score');
+
+  let current = 0;
+  let state = {};
+  const shuffle = (arr)=>{const a=arr.map((t,i)=>({t,i}));for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;};
+  const AB='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+  function renderTabs(){
+    tabs.innerHTML='';
+    MATCHERS.forEach((m,idx)=>{
+      const b=document.createElement('button');
+      b.className='secondary';
+      b.textContent=m.id+' · '+m.title;
+      if(idx===current)b.style.outline='2px solid var(--accent)';
+      b.addEventListener('click',()=>{current=idx;render();});
+      tabs.appendChild(b);
+    });
+  }
+
+  function render(){
+    renderTabs(); scoreEl.textContent='';
+    const m=MATCHERS[current];
+    if(!state[m.id]){
+      state[m.id]={key:m.right.map((_,i)=>i),rightMixed:shuffle(m.right),answers:Array(m.left.length).fill('')};
+    }
+    const S=state[m.id];
+    root.innerHTML='';
+    const rightBox=document.createElement('div'); rightBox.className='card'; rightBox.style.marginBottom='10px';
+    rightBox.innerHTML='<strong>Banco de respuestas (letras)</strong>';
+    const rightList=document.createElement('ul'); rightList.style.listStyle='none'; rightList.style.padding='0';
+    S.rightMixed.forEach((obj,k)=>{const li=document.createElement('li');li.style.padding='6px 8px';li.style.border='1px solid rgba(255,255,255,.12)';li.style.borderRadius='10px';li.style.margin='6px 0';li.textContent=`${AB[k]}) ${obj.t}`;rightList.appendChild(li);});
+    rightBox.appendChild(rightList);
+
+    const table=document.createElement('div'); table.style.display='grid'; table.style.gridTemplateColumns='minmax(120px,1fr) 120px'; table.style.gap='8px';
+    m.left.forEach((txt,idx)=>{const rowLabel=document.createElement('div');rowLabel.textContent=txt;const sel=document.createElement('select');sel.className='fillin';sel.style.padding='8px';sel.style.background='rgba(0,0,0,.2)';sel.style.cursor='pointer';const def=document.createElement('option');def.value='';def.textContent='—';sel.appendChild(def);
+    S.rightMixed.forEach((_,k)=>{const opt=document.createElement('option');opt.value=k;opt.textContent=AB[k];sel.appendChild(opt);});
+    sel.value=S.answers[idx];sel.addEventListener('change',()=>{S.answers[idx]=sel.value;});table.appendChild(rowLabel);table.appendChild(sel);});
+    root.appendChild(rightBox);root.appendChild(table);
+  }
+
+  document.getElementById('matcher-grade').addEventListener('click',()=>{
+    const m=MATCHERS[current];const S=state[m.id];let correct=0,total=m.left.length;
+    m.left.forEach((_,idx)=>{const chosen=S.answers[idx];if(chosen==='')return;const chosenOriginalIndex=S.rightMixed[Number(chosen)].i;if(chosenOriginalIndex===S.key[idx])correct++;});
+    const pct=Math.round(correct/total*100);scoreEl.textContent=`Puntuación: ${correct}/${total} (${pct}%)`;
+    document.querySelectorAll('#matcher select.fillin').forEach((sel,idx)=>{sel.classList.remove('correct','incorrect');const chosen=sel.value;if(chosen==='')return;const chosenOriginalIndex=S.rightMixed[Number(chosen)].i;sel.classList.add(chosenOriginalIndex===S.key[idx]?'correct':'incorrect');});
+  });
+
+  document.getElementById('matcher-reset').addEventListener('click',()=>{state[MATCHERS[current].id]=null;render();});
+  render();
+})();
+</script>
+
 
     <footer>
       <p>Tip: La Dra. enfatiza <strong>dosis + duración</strong>. Revisa con atención 3, 6, 16 y 19.</p>
     </footer>
   </div>
-
+//===menu===//
 <script>
 // ==== PREGUNTAS (4–20) ====
 const QUESTIONS = [
@@ -254,6 +770,1197 @@ const QUESTIONS = [
     correct:0
   }
 ];
+// Copia del cuestionario actual para el botón “Antivirales”
+const ANTIVIRALES = JSON.parse(JSON.stringify(QUESTIONS));
+// === CUESTIONARIO #2 – ANTIRRETROVIRALES ===
+const ANTIRRETROVIRALES = [
+  {id:1,type:'mcq',q:'1. Grupos principales de antirretrovirales',opts:[
+    'ITIN, ITINN, IP, IE, II.',
+    'Penicilinas, cefalosporinas, IP, II, IE.',
+    'ITIN, ITINN, antifúngicos, IE, II.',
+    'ITIN, macrólidos, IE, IP, antivirales tópicos.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. ITIN – Fármacos',opts:[
+    'Zidovudina, Lamivudina, Tenofovir, Abacavir, Didanosina.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina, Indinavir.',
+    'Ritonavir, Darunavir, Fosamprenavir, Lopinavir, Atazanavir.',
+    'Raltegravir, Dolutegravir, Elvitegravir, Bictegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. ITINN – Fármacos',opts:[
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina.',
+    'Zidovudina, Lamivudina, Abacavir, Tenofovir.',
+    'Indinavir, Ritonavir, Lopinavir, Darunavir.',
+    'Raltegravir, Dolutegravir, Bictegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Inhibidores de la proteasa',opts:[
+    'Ritonavir, Darunavir, Atazanavir, Lopinavir, Fosamprenavir.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina, Indinavir.',
+    'Zidovudina, Abacavir, Lamivudina, Tenofovir, Atazanavir.',
+    'Raltegravir, Elvitegravir, Bictegravir, Dolutegravir, Cabotegravir.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Inhibidores de integrasa',opts:[
+    'Raltegravir, Dolutegravir, Elvitegravir, Bictegravir.',
+    'Ritonavir, Darunavir, Indinavir, Fosamprenavir.',
+    'Efavirenz, Nevirapina, Etravirina, Rilpivirina.',
+    'Zidovudina, Lamivudina, Tenofovir, Abacavir.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Objetivo del tratamiento TARV',opts:[
+    'Suprimir VIH, restaurar inmunidad, evitar progresión.',
+    'Aumentar replicación viral, inducir respuesta.',
+    'Reducir síntomas sin eliminar el virus.',
+    'Estimular anticuerpos sin antivirales.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Fracaso terapéutico',opts:[
+    'Reaparición de carga viral o falta de respuesta.',
+    'EA leve o toxicidad GI por fármaco.',
+    'Disminución CD4 sin aumento viral.',
+    'Cambio de esquema sin razón médica.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Zidovudina – Efectos adversos',opts:[
+    'EA: anemia, neutropenia, GI, cefalea, miopatía.',
+    'EA: cefalea, mialgia, GI, rash, fatiga.',
+    'EA: hepatotoxicidad, insomnio, GI, tos, mareo.',
+    'EA: anemia, prurito, cefalea, visión, GI.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. Abacavir – Efectos adversos',opts:[
+    'EA: hipersensibilidad, fiebre, GI, rash leve.',
+    'EA: anemia, cefalea, GI, mialgia, visión.',
+    'EA: hiperlipidemia, cefalea, GI, rash leve.',
+    'EA: GI, tos, erupción leve, mareo.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Didanosina – Efectos adversos',opts:[
+    'EA: pancreatitis, neuropatía, GI, hiperuricemia.',
+    'EA: neuropatía, GI, hepatotoxicidad, rash leve.',
+    'EA: anemia, GI, cefalea, mialgia.',
+    'EA: diarrea, insomnio, GI, parestesias.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Nevirapina – Efectos adversos',opts:[
+    'EA: rash, hepatotoxicidad, fiebre, GI.',
+    'EA: anemia, neuropatía, rash leve, tos.',
+    'EA: GI, cefalea, fiebre, prurito.',
+    'EA: insomnio, erupción leve, GI, rash.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Ritonavir – Efectos adversos',opts:[
+    'EA: GI, hiperlipidemia, parestesias, transaminasas ↑.',
+    'EA: GI, rash, mialgia, leve nefro.',
+    'EA: anemia, GI, cefalea, leve hepato.',
+    'EA: GI, astenia, insomnio, parestesias.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Efavirenz – Efectos adversos',opts:[
+    'EA: mareo, insomnio, sueños vívidos, GI.',
+    'EA: cefalea, somnolencia, GI, rash.',
+    'EA: fiebre, astenia, insomnio, GI.',
+    'EA: visión borrosa, cefalea, GI, prurito.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Activos contra VIH y VHB',opts:[
+    'Tenofovir y Lamivudina.',
+    'Zidovudina y Abacavir.',
+    'Efavirenz y Nevirapina.',
+    'Ritonavir y Darunavir.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Principio de terapia combinada',opts:[
+    'Uso ≥3 fármacos distintos para evitar resistencia.',
+    'Uso 2 fármacos idénticos para mayor potencia.',
+    'Alternar 1 antiviral y 1 antibiótico semanal.',
+    'Usar un solo fármaco con dosis altas.'
+  ],correct:0},
+
+  {id:16,type:'mcq',q:'16. Esquema preferido en El Salvador',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir.',
+    'Zidovudina + Efavirenz + Lopinavir.',
+    'Abacavir + Ritonavir + Rilpivirina.',
+    'Lamivudina + Atazanavir + Nevirapina.'
+  ],correct:0},
+
+  {id:17,type:'mcq',q:'17. Uso pediátrico',opts:[
+    'Dosis por peso, preferir Zidovudina o Abacavir.',
+    'Igual dosis que adultos sin ajuste.',
+    'Evitar TARV antes de 12 años.',
+    'Usar solo inhibidor de proteasa.'
+  ],correct:0},
+
+  {id:18,type:'mcq',q:'18. Embarazo – esquema preferido',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir.',
+    'Zidovudina + Efavirenz + Lopinavir.',
+    'Abacavir + Nevirapina + Raltegravir.',
+    'Lamivudina + Atazanavir + Rilpivirina.'
+  ],correct:0},
+
+  {id:19,type:'mcq',q:'19. Profilaxis post exposición',opts:[
+    'Tenofovir + Lamivudina + Dolutegravir 28 días.',
+    'Abacavir + Zidovudina + Efavirenz 14 días.',
+    'Tenofovir + Nevirapina + Lopinavir 10 días.',
+    'Lamivudina + Ritonavir + Atazanavir 21 días.'
+  ],correct:0},
+
+  {id:20,type:'mcq',q:'20. Inhibidores de integrasa – uso clínico',opts:[
+    'Supresión viral potente, inicio o rescate, buena tolerancia.',
+    'Solo en casos multirresistentes o refractarios.',
+    'En monoterapia corta.',
+    'En combinación con antibióticos.'
+  ],correct:0}
+];
+// === CUESTIONARIO #3 – ANTIMICÓTICOS ===
+const ANTIMICOTICOS = [
+  {id:1,type:'mcq',q:'1. Antimicóticos sistémicos',opts:[
+    'Anfotericina B, Flucitosina, Triazoles, Equinocandinas.',
+    'Nistatina, Clotrimazol, Terbinafina, Econazol.',
+    'Ketoconazol, Griseofulvina, Nistatina, Oxiconazol.',
+    'Anfotericina B, Tioconazol, Isoconazol, Oxiconazol.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Anfotericina B – mecanismo',opts:[
+    'Se une a ergosterol y altera la membrana fúngica.',
+    'Inhibe síntesis de ADN.',
+    'Inhibe síntesis de quitina.',
+    'Inactiva escualeno epoxidasa.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. Anfotericina B – efectos adversos',opts:[
+    'Fiebre, escalofríos, nefrotoxicidad, anemia, flebitis.',
+    'Hipoglucemia, prurito, visión borrosa, mialgia.',
+    'Tos seca, cefalea, insomnio, fiebre leve.',
+    'Somnolencia, eritema, disnea, vértigo.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Flucitosina – efectos adversos',opts:[
+    'Depresión de MO, GI, rash, ↑ transaminasas.',
+    'Cefalea, prurito, insomnio, náuseas leves.',
+    'Náuseas, vómitos, fiebre, tos seca.',
+    'GI leve, visión borrosa, hipocalcemia.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Azoles – familias',opts:[
+    'Imidazoles: clotrimazol, ketoconazol. Triazoles: fluconazol, voriconazol.',
+    'Imidazoles: flucitosina, caspofungina. Triazoles: itraconazol, micafungina.',
+    'Imidazoles: econazol, anidulafungina. Triazoles: nistatina, terbinafina.',
+    'Imidazoles: miconazol, posaconazol. Triazoles: anfotericina, flucitosina.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Itraconazol – usos',opts:[
+    'Blastomicosis, histoplasmosis, onicomicosis, esporotricosis.',
+    'Aspergilosis, meningitis criptocócica, candidiasis vaginal.',
+    'Tiña capitis, candidiasis cutánea, queratitis micótica.',
+    'Candidiasis oral, infecciones urinarias, otitis externa.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Fluconazol – usos',opts:[
+    'Candidiasis orofaríngea, vaginal, criptococosis, meningitis coccidioidal.',
+    'Histoplasmosis diseminada, esporotricosis, aspergilosis.',
+    'Tiña corporal, pitiriasis versicolor, onicomicosis.',
+    'Micosis cutáneas, otitis micótica, muguet oral.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Fluconazol – presentaciones',opts:[
+    'Tabletas 50–200 mg, polvo suspensión 10–40 mg/mL, IV 2 mg/mL.',
+    'Cápsulas 10–25 mg, jarabe 100 mg/mL, IM 4 mg/mL.',
+    'Tabletas 50–100 mg, supositorios 250 mg, IV 10 mg/mL.',
+    'Jarabe 20 mg/mL, parches 10%, crema 1%.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. Fluconazol en vaginitis – dosis',opts:[
+    '150 mg VO dosis única.',
+    '100 mg cada 12 h por 3 días.',
+    '200 mg VO por 5 días.',
+    '150 mg cada 48 h por 3 dosis.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Equinocandinas – fármacos',opts:[
+    'Caspofungina, Micafungina, Anidulafungina.',
+    'Clotrimazol, Econazol, Tioconazol.',
+    'Fluconazol, Itraconazol, Voriconazol.',
+    'Nistatina, Griseofulvina, Terbinafina.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Anidulafungina – usos',opts:[
+    'Candidemia, abscesos intraabdominales, peritonitis.',
+    'Aspergilosis, meningitis criptocócica, onicomicosis.',
+    'Tiña corporal, tiña versicolor, pitiriasis.',
+    'Candidiasis vaginal no complicada.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Griseofulvina – mecanismo',opts:[
+    'Inhibe microtúbulos y bloquea mitosis fúngica.',
+    'Se une a ergosterol y altera la membrana.',
+    'Inhibe ADN polimerasa.',
+    'Aumenta permeabilidad al potasio.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Griseofulvina – presentaciones',opts:[
+    'Tabletas 125 y 500 mg.',
+    'Cápsulas 100 y 250 mg.',
+    'Jarabe 25 mg/mL.',
+    'Tabletas 250 y 750 mg.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Griseofulvina – usos',opts:[
+    'Tiña, onicomicosis.',
+    'Meningitis criptocócica.',
+    'Aspergilosis broncopulmonar.',
+    'Histoplasmosis diseminada.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Terbinafina – usos',opts:[
+    'Tiña, onicomicosis (tópica o sistémica).',
+    'Candidiasis mucocutánea.',
+    'Aspergilosis, histoplasmosis.',
+    'Micosis pulmonares.'
+  ],correct:0},
+
+  {id:16,type:'mcq',q:'16. Clotrimazol – presentaciones',opts:[
+    'Crema, loción, polvo, aerosol, crema vaginal, tabletas vaginales, trociscos.',
+    'Solo crema tópica 1%.',
+    'Tabletas 200 mg VO.',
+    'Gel oral 10 mg/mL.'
+  ],correct:0},
+
+  {id:17,type:'mcq',q:'17. Clotrimazol en vaginitis – esquemas',opts:[
+    '100 mg x 7 días / 200 mg x 3 días / 500 mg dosis única / crema 1–2%.',
+    '100 mg x 3 días / crema 1% x 5 días / VO 150 mg.',
+    '50 mg x 5 días / crema 0.5%.',
+    '200 mg x 1 día / crema 1%.'
+  ],correct:0},
+
+  {id:18,type:'mcq',q:'18. Nistatina – usos y vía',opts:[
+    'Candidiasis vulvovaginal, oral y cutánea; uso tópico.',
+    'Aspergilosis pulmonar; vía oral.',
+    'Histoplasmosis; vía IV.',
+    'Candidemia; vía IM.'
+  ],correct:0},
+
+  {id:19,type:'mcq',q:'19. Pomada de Whitfield – composición',opts:[
+    'Ácido benzoico 6% + ácido salicílico 3%.',
+    'Ácido bórico 6% + ácido láctico 3%.',
+    'Benzoato 10% + ácido acético 2%.',
+    'Ácido fórmico 6% + benzoico 1%.'
+  ],correct:0},
+
+  {id:20,type:'mcq',q:'20. Terbinafina – mecanismo clave',opts:[
+    'Inhibe escualeno epoxidasa (↓ ergosterol).',
+    'Bloquea β-glucano sintasa.',
+    'Inhibe síntesis de ADN.',
+    'Quelante de hierro fúngico.'
+  ],correct:0}
+];
+// === CUESTIONARIO #4 – INTRODUCCIÓN A LA ENDOCRINOLOGÍA (SECCIÓN C) ===
+const ENDOCRINO = [
+  {id:1,type:'mcq',q:'1. Conceptualmente las hormonas se pueden dividir en dos clases',opts:[
+    'Hormonas de acción nuclear y de acción membranal.',
+    'Hormonas esteroideas y peptídicas exclusivamente.',
+    'Hormonas tróficas y no tróficas únicamente.',
+    'Hormonas hipotalámicas y hipofisarias solamente.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Las hormonas hipofisiarias se pueden clasificar en tres grupos',opts:[
+    'Derivadas de POMC, glucoproteicas y somatotrópicas.',
+    'Derivadas de POMC, catecolaminas y esteroideas.',
+    'Glucoproteicas, tiroideas y gonadales.',
+    'Somatotrópicas, tiroideas y pancreáticas.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. ¿Cuáles son los nombres de las hormonas liberadoras hipotalámicas?',opts:[
+    'TRH, CRH, GnRH, GHRH.',
+    'TSH, ACTH, FSH, LH.',
+    'TRH, TSH, ACTH, GH.',
+    'GnRH, PRL, ADH, oxitocina.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Los dos análogos sintéticos de SST utilizados en la clínica son',opts:[
+    'Octreótido y Lanreótido.',
+    'Somatropina y Mecasermina.',
+    'Leuprolida y Goserelina.',
+    'Bromocriptina y Cabergolina.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. ¿Cuál es la utilidad de los análogos de la somatostatina?',opts:[
+    'Acromegalia; adenoma tirotropo; sangrado/periop cirugía pancreática; Cushing.',
+    'Hipotiroidismo; diabetes tipo 1; Addison; hipogonadismo.',
+    'Prolactinoma; Parkinson; DM2; amenorrea por hiperPRL.',
+    'Hipercalcemia maligna; hipotiroidismo; bocio nodular; Cushing.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Escriba los efectos adversos de los análogos de la somatostatina',opts:[
+    'GI, colelitiasis, bradicardia/QT, alteración de glucosa, hipo/hipertiroidismo raro.',
+    'GI leves, rash, tos, visión borrosa, hipotensión postural.',
+    'HiperK, nefrotoxicidad, miopatía, broncoespasmo, hipouricemia.',
+    'Hiperglucemia severa, anemia hemolítica, pancreatitis necrosante, hipoNa.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Nombre del antagonista de la somatostatina y su utilidad',opts:[
+    'Pegvisomant: acromegalia (mono o combinado).',
+    'Degarelix: cáncer de próstata avanzado.',
+    'Ganirelix: prevención de ovulación prematura.',
+    'Octreótido: hemorragia por várices esofágicas.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. ¿Cuáles son los nombres de los agonistas de la dopamina?',opts:[
+    'Bromocriptina, Cabergolina, Quinagolida.',
+    'Levodopa, Pramipexol, Ropinirol.',
+    'Selegilina, Amantadina, Entacapona.',
+    'Pergolida, Leuprolida, Somatostatina.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. ¿Cuáles son las utilidades de los agonistas de la dopamina?',opts:[
+    'HiperPRL (Bromo/Caber; útiles en embarazo); Bromo en Parkinson y DM2; Caber útil en acromegalia; Quinagolida: hiperPRL.',
+    'Hipotiroidismo subclínico; bocio nodular; prolactinoma resistente; Addison.',
+    'Síndrome nefrótico; Cushing; hipoglucemia reactiva; DM1.',
+    'Hipocalcemia; hiperparatiroidismo; anemia aplásica; migraña crónica.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Escriba las indicaciones terapéuticas para el uso de la somatotropina',opts:[
+    'Niños: deficiencia GH, Turner/Noonan, Prader–Willi, IRC, PEG/talla baja; Adultos: caquexia SIDA, intestino corto.',
+    'Niños: pubertad precoz; Adultos: hipogonadismo; ambos: hipertiroidismo.',
+    'Niños: anemia crónica; Adultos: EPOC; ambos: migraña refractaria.',
+    'Niños: DM1; Adultos: hipercortisolismo; ambos: hipercalcemia.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Escriba los efectos adversos de la somatotropina',opts:[
+    'Niños: HIC, NV, T2DM, epífisis/ escoliosis; Adultos: edema, túnel carpiano, artralgias/mialgias, precipita insuf. suprarrenal.',
+    'Niños: hipoglucemia; Adultos: hiperkalemia; ambos: broncoespasmo severo.',
+    'Niños: anemia; Adultos: agranulocitosis; ambos: pancreatitis recurrente.',
+    'Niños: hipoNa; Adultos: hipoCa; ambos: rabdomiólisis.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. ¿Qué es la mecasermina?',opts:[
+    'IGF-1 humano recombinante de uso terapéutico.',
+    'Análogo de GHRH de acción prolongada.',
+    'Antagonista del receptor de GH.',
+    'Forma sintética de somatostatina.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. ¿Qué es la tesamorelina?',opts:[
+    'Forma sintética modificada N-terminal de GHRH de acción prolongada.',
+    'Análogo de GnRH depot de liberación sostenida.',
+    'Antagonista selectivo del receptor de somatostatina.',
+    'Prohormona de IGF-1 de administración oral.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Escriba el nombre de los congéneres de GnRh',opts:[
+    'Leuprolida, Goserelina, Histrelina, Nafarelina, Triptorelina.',
+    'Ganirelix, Cetrorelix, Degarelix, Abarelix, Elagolix.',
+    'Bromocriptina, Cabergolina, Quinagolida, Pergolida, Pramipexol.',
+    'Octreótido, Lanreótido, Pasireótido, Vapreótido, Somatostatina.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. ¿Cuáles son las utilidades de los congéneres de GnRh?',opts:[
+    'Dx/Tx pubertad precoz dependiente; paliativo CA próstata/mama; suprimir esteroide-dependientes (endometriosis, fibromas, porfiria, priapismo); evitar pico LH en FIV.',
+    'Inducir ovulación espontánea en SOP; corregir hipotiroidismo y Addison; tratar DM2 resistente.',
+    'Tratar anemia aplásica, insuficiencia renal crónica y bocio tóxico.',
+    'Profilaxis de hipocalcemia posquirúrgica y manejo de hipoprolactinemia.'
+  ],correct:0},
+
+  {id:16,type:'mcq',q:'16. ¿Cuáles son los nombres de los antagonistas de la GnRh?',opts:[
+    'Ganirelix, Cetrorelix, Degarelix.',
+    'Leuprolida, Goserelina, Triptorelina.',
+    'Octreótido, Lanreótido, Pasireótido.',
+    'Bromocriptina, Cabergolina, Quinagolida.'
+  ],correct:0},
+
+  {id:17,type:'mcq',q:'17. ¿Cuáles son las utilidades de los antagonistas de la GnRh?',opts:[
+    'Reproducción asistida (suprimir LH); off-label endometriosis/fibromas; CA próstata y castración médica (degarelix).',
+    'Inducción de ovulación en SOP leve; control de hipertiroidismo; migraña refractaria.',
+    'Tratamiento de DM2, obesidad exógena y síndrome nefrótico.',
+    'Corrección aguda de hipercalcemia maligna e hiponatremia.'
+  ],correct:0},
+
+  {id:18,type:'mcq',q:'18. ¿Cuáles son los usos terapéuticos de la Hcg',opts:[
+    'Infertilidad masculina y criptorquidia.',
+    'Preeclampsia y amenaza de aborto.',
+    'Hipertiroidismo y bocio nodular.',
+    'Insuficiencia suprarrenal y Addison.'
+  ],correct:0},
+
+  {id:19,type:'mcq',q:'19. ¿Cuáles son los usos clínicos de la oxitocina?',opts:[
+    'Inducción/estimulación del parto; prevención/tratamiento de HPP; tocolítica en parto pretérmino (según texto).',
+    'Inducción de aborto en primer trimestre exclusivamente.',
+    'Control de eclampsia y preeclampsia severa.',
+    'Tratamiento de hipogalactia crónica por PRL baja.'
+  ],correct:0},
+
+  {id:20,type:'mcq',q:'20. Es la dosis de oxitocina para detener la hemorragia postparto',opts:[
+    '10 UI IM inmediato posparto; alternativa: 20 UI en 1 L IV a 10 mU/min, reducir a 1–2 mU/min.',
+    '5 UI IM; alternativa: 10 UI en 500 mL IV a 2 mU/min por 2 h.',
+    '20 UI IM; alternativa: 40 UI en 1 L IV a 40 mU/min sostenido.',
+    '2 UI IM; alternativa: 20 UI en 250 mL IV a 1 mU/min continuo.'
+  ],correct:0}
+];
+// === CUESTIONARIO #5 – ACTH, ESTEROIDES ADRENOCORTICALES Y CORTEZA SUPRARRENAL ===
+const ACTH = [
+  {id:1,type:'mcq',q:'1. Corteza suprarrenal – zonas y secreción',opts:[
+    'Glomerular: aldosterona; fascicular: cortisol; reticular: DHEA/DHEA-S.',
+    'Glomerular: cortisol; fascicular: andrógenos; reticular: aldosterona.',
+    'Glomerular: adrenalina; fascicular: GH; reticular: insulina.',
+    'Glomerular: mineralocorticoides; fascicular: catecolaminas; reticular: prolactina.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Efectos de la ACTH fuera de las suprarrenales',opts:[
+    'Cetosis, lipólisis, hipoglucemia inicial, resistencia a insulina posterior.',
+    'Hipercalcemia, hipopotasemia, hiperuricemia.',
+    'Hiperglucemia persistente, hiponatremia, fiebre.',
+    'Hipoglucemia sostenida, anemia, hipotiroidismo.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. Regulación del eje HPA',opts:[
+    'Ritmo diurno, retroalimentación negativa, estrés.',
+    'Somatostatina, dopamina, insulina.',
+    'GH, glucagón, leptina.',
+    'Hipoxia, temperatura, dieta.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Usos diagnósticos y terapéuticos de la ACTH',opts:[
+    'Dx: prueba de estimulación CRH y ensayo ACTH; Tx: limitado, se prefiere corticoide directo.',
+    'Dx: prueba de insulina; Tx: hipotiroidismo.',
+    'Dx: prueba de GnRH; Tx: acromegalia.',
+    'Dx: prueba de TRH; Tx: Addison agudo.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Efectos fisiológicos y farmacológicos de los corticosteroides',opts:[
+    'Modulan metabolismo (CHO, lípidos, proteínas), equilibrio hídrico y respuesta al estrés; antiinflamatorio potente.',
+    'Solo estimulan síntesis proteica.',
+    'Actúan solo sobre glucosa hepática.',
+    'Exclusivamente inmunosupresores sin acción metabólica.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Complicaciones por abstinencia de glucocorticoides',opts:[
+    'Recaída de enfermedad, fiebre, mialgias, riesgo de insuf. suprarrenal aguda, pseudotumor cerebral raro.',
+    'Hiperglucemia, úlceras, HTA leve.',
+    'Retención de líquidos y edema generalizado.',
+    'Hipocalcemia e hipotiroidismo secundario.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Efectos por uso continuo de glucocorticoides',opts:[
+    'HTA, hiperglucemia, miopatía, inmunosupresión, úlceras, cambios conductuales, osteoporosis, retraso del crecimiento.',
+    'Hipotensión, hipoglucemia, hipercalcemia, depresión.',
+    'Hipertermia, hipotiroidismo, trombocitopenia.',
+    'Hipouricemia, diarrea, parestesias.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Cuidados con administración prolongada',opts:[
+    'Usar dosis mínima eficaz; reducir gradualmente; ID médica; educar familia para crisis.',
+    'Suspender abruptamente; duplicar dosis ante estrés.',
+    'Administrar en ayuno prolongado sin monitoreo.',
+    'Evitar reducción gradual; mantener dosis fija.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Tratamiento de insuficiencia suprarrenal',opts:[
+    'Aguda: NaCl + glucosa + hidrocortisona IV 100 mg; Crónica: hidrocortisona 20–30 mg/d + fludrocortisona 0.05–0.2 mg/d.',
+    'Aguda: líquidos y dopamina; Crónica: prednisona 10 mg/d.',
+    'Aguda: furosemida IV; Crónica: espironolactona.',
+    'Aguda: dextrosa oral; Crónica: sin tratamiento.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Aplicaciones diagnósticas de la dexametasona',opts:[
+    'Dx de hipercortisolismo y diferenciación de causas de Cushing.',
+    'Dx de Addison.',
+    'Dx de hipotiroidismo primario.',
+    'Dx de síndrome metabólico.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Fármacos inhibidores de la esteroidogénesis',opts:[
+    'Ketoconazol, Metirapona, Etomidato, Mitotano.',
+    'Fludrocortisona, Dexametasona, Prednisona, Budesonida.',
+    'Levotiroxina, Octreótido, Bromocriptina, Somatotropina.',
+    'Espironolactona, Eplerenona, Amilorida, Furosemida.'
+  ],correct:0}
+];
+// === CUESTIONARIO #6 – PÁNCREAS ENDOCRINO, DIABETES E HIPOGLUCEMIA ===
+const DIABETES = [
+  {id:1,type:'mcq',q:'1. Objetivos de la terapia en DM',opts:[
+    'Aliviar síntomas de hiperglucemia y prevenir descompensación aguda/complicaciones crónicas.',
+    'Normalizar solo la HbA1c sin considerar síntomas o eventos agudos.',
+    'Evitar toda medicación y priorizar únicamente la dieta estricta.',
+    'Corregir dislipidemia sin tratar la glucemia.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Fármacos que pueden causar hiper e hipoglucemia (par correcto)',opts:[
+    'Hiper: glucocorticoides/tiroxina/tiazidas/β-agonistas; Hipo: β-bloqueadores/IECA/etanol/pentamidina.',
+    'Hiper: IECA/etanol; Hipo: glucocorticoides/tiazidas.',
+    'Hiper: metformina/GLP-1; Hipo: SGLT2/α-glucosidasa.',
+    'Hiper: estatinas/fibratos; Hipo: diuréticos de asa.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. Componentes del manejo integral de la DM',opts:[
+    'Tratar comorbilidades, control glucémico (estilo de vida + fármacos) y detección/manejo de complicaciones.',
+    'Solo control glucémico farmacológico.',
+    'Únicamente dieta y ejercicio; descartar complicaciones al final.',
+    'Monitoreo de presión arterial sin modificar glucosa.'
+  ],correct:0},
+
+  {id:4,type:'mcq',q:'4. Clasificación de insulinas por duración',opts:[
+    'Acción corta y acción prolongada.',
+    'Acción ultracorta, intermedia y extralarga únicamente.',
+    'Solo acción intermedia.',
+    'Basal frente a prandial exclusivamente.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Preparaciones por tiempo de acción',opts:[
+    'Cortas: aspart/glulisina/lispro/regular; Prolongadas: detemir/glargina/degludec/NPH; Inhalada: Afrezza.',
+    'Cortas: NPH/deg­ludec; Prolongadas: lispro/regular; Inhalada: ninguna.',
+    'Cortas: glargina/detemir; Prolongadas: aspart/lispro; Inhalada: tiotropio.',
+    'Cortas: glipizida/repaglinida; Prolongadas: metformina/NPH; Inhalada: budesonida.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Vías de administración de insulina',opts:[
+    'SC; IV en situaciones especiales (cetoacidosis, perioperatorio, parto, UCI).',
+    'IM de rutina; IV prohibida.',
+    'Solo vía oral en formulación entérica.',
+    'Inhalada para todas las emergencias.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Factores que afectan absorción de insulina',opts:[
+    'Sitio y tipo; flujo subcutáneo; tabaco; actividad muscular; volumen/concentración; profundidad.',
+    'Edad y sexo exclusivamente.',
+    'Estado de hidratación y función renal únicamente.',
+    'pH gástrico y presencia de alimentos.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Efectos adversos de la insulina',opts:[
+    'Hipoglucemia; ↑ peso; alergia; lipoatrofia/lipohipertrofia.',
+    'Hipercalcemia severa y bradicardia.',
+    'Pancreatitis necrotizante como evento principal.',
+    'Hepatotoxicidad fulminante en la mayoría.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. Secretagogos de insulina y agentes reductores de glucosa',opts:[
+    'Secretagogos: sulfonilureas/meglitinidas/GLP-1/DPP-4; Reductores: metformina/TZD/α-glucosidasa/SGLT2/pramlintida/resinas/bromocriptina.',
+    'Secretagogos: SGLT2/α-glucosidasa; Reductores: sulfonilureas/GLP-1.',
+    'Secretagogos: metformina/TZD; Reductores: meglitinidas/GLP-1.',
+    'Secretagogos: insulina basal; Reductores: estatinas/fibratos.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Grupos de secretagogos y fármacos',opts:[
+    'Sulfonilureas (1ª/2ª gen.), meglitinidas, agonistas GLP-1, inhibidores DPP-4.',
+    'Sulfonilureas, SGLT2, TZD y metformina.',
+    'Meglitinidas, α-glucosidasa y resinas biliares.',
+    'GLP-1, DPP-4, SGLT1 y amilina exclusiva.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Mecanismo de acción de sulfonilureas',opts:[
+    'Bloquean KATP (sitio SUR) en células β → despolarización → Ca²⁺ → exocitosis de insulina.',
+    'Activan PPARγ y redistribuyen lípidos.',
+    'Inhiben DPP-4 y aumentan GLP-1 endógeno.',
+    'Bloquean α-glucosidasa intestinal.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Metformina – mecanismo y EA clave',opts:[
+    '↓ gluconeogénesis hepática (AMPK), ↑ captación y oxidación; EA: GI, ↓ B12, rara acidosis láctica (contraindicaciones renales/hepáticas).',
+    '↑ secreción de insulina; EA: hipoglucemia marcada.',
+    'Bloquea SGLT2; EA: euglucémica cetoacidosis.',
+    'Inhibe DPP-4; EA: pancreatitis obligada.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Mecanismo de las meglitinidas',opts:[
+    'Bloqueo rápido de KATP en β → secreción posprandial dependiente de glucosa.',
+    'Inhibición de α-glucosidasa en borde en cepillo.',
+    'Antagonismo del receptor glucagón.',
+    'Activación de PPARα.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Dosis máxima diaria de metformina y efectos',opts:[
+    'Hasta 2550 mg/d (beneficio se estabiliza ≈2000 mg); ↓ glucosa ayuno/posprandial, no hipoglucemia, posible ↓ peso y beneficio CV/microvascular.',
+    '2000 mg/d obligatorios; provoca hipoglucemia en normoglucémicos.',
+    '3000 mg/d siempre; aumenta peso y triglicéridos.',
+    '1500 mg/d como máximo; sin efecto en glucosa posprandial.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Tiazolidinedionas – mecanismo',opts:[
+    'Agonistas PPARγ: ↑ sensibilidad a insulina (músculo/hígado/tejido adiposo), redistribuyen TG, ↑ adiponectina.',
+    'Inhiben DPP-4 y ↑ incretinas.',
+    'Bloquean SGLT2 en túbulo proximal.',
+    'Estimulan secreción directa de insulina.'
+  ],correct:0},
+
+  {id:16,type:'mcq',q:'16. Agentes basados en GLP-1 y efectos',opts:[
+    'Exenatida/liraglutida/albiglutida/dulaglutida/lixisenatida: ↑ insulina dependiente de glucosa, ↓ glucagón, ↓ vaciamiento gástrico y apetito, ↓ HbA1c/peso; algunos con beneficio CV.',
+    'Sitagliptina/saxagliptina/linagliptina: ↑ secreción independiente de glucosa.',
+    'Acarbosa/miglitol: ↓ apetito y peso por saciedad central.',
+    'Canagliflozina/dapagliflozina: ↑ incretinas y ↓ glucagón.'
+  ],correct:0},
+
+  {id:17,type:'mcq',q:'17. Mecanismo de agonistas del receptor GLP-1',opts:[
+    'Activan receptor GLP-1 (GPCR) → vías AMP-PKA/PI3K → ↑ biosíntesis y exocitosis de insulina, ↓ vaciamiento gástrico y apetito.',
+    'Bloquean KATP β pancreática directamente.',
+    'Inhiben α-glucosidasa intestinal.',
+    'Antagonizan PPARγ en tejido adiposo.'
+  ],correct:0},
+
+  {id:18,type:'mcq',q:'18. Mecanismo de los inhibidores de DPP-4',opts:[
+    'Inhiben DPP-4 → ↑ GLP-1/GIP activos → ↑ insulina dependiente de glucosa y ↓ glucagón.',
+    'Inhiben SGLT2 → glucosuria y ↓ glucosa.',
+    'Activan PPARγ → ↑ sensibilidad.',
+    'Inhiben gluconeogénesis hepática directamente.'
+  ],correct:0},
+
+  {id:19,type:'mcq',q:'19. Mecanismo de los inhibidores de α-glucosidasa',opts:[
+    'Bloquean α-glucosidasa en borde en cepillo → ↓ digestión/absorción de CHO → ↓ pico posprandial.',
+    'Inhiben lipasa pancreática → ↓ TG.',
+    'Bloquean GLUT4 en músculo.',
+    'Antagonizan receptor glucagón hepático.'
+  ],correct:0},
+
+  {id:20,type:'mcq',q:'20. Tratamiento de hipoglucemia',opts:[
+    'Leve/moderada: glucosa oral; Grave: glucosa IV o glucagón 1 mg IM/IV/SC y luego aporte oral.',
+    'Leve: agua; Grave: solo reposo.',
+    'Leve: glucosa IV; Grave: insulina rápida.',
+    'Leve: glucagón IM; Grave: restricción de carbohidratos.'
+  ],correct:0}
+];
+// === CUESTIONARIO #7 – ANDRÓGENOS ===
+const ANDROGENOS = [
+  {id:1,type:'mcq',q:'1. Sitios de producción de andrógenos',opts:[
+    'Células de Leydig (testículo), corteza suprarrenal y ovario.',
+    'Solo células de Sertoli y glándula prostática.',
+    'Corteza suprarrenal exclusivamente.',
+    'Únicamente en túbulos seminíferos.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Principal andrógeno natural',opts:[
+    'Testosterona.',
+    'Dihidrotestosterona (DHT).',
+    'Androstenediona.',
+    'Dehidroepiandrosterona (DHEA).'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. Andrógenos más importantes secretados en el varón adulto',opts:[
+    'Testosterona, DHT y androstenediona.',
+    'Testosterona, progesterona y estrona.',
+    'DHEA, cortisol y estradiol.',
+    'Cortisol, pregnenolona y DHT.'
+  ],correct:0},
+
+  // P4 fue el recuadro interactivo
+
+  {id:5,type:'mcq',q:'5. Enzimas necesarias para la conversión de colesterol en testosterona',opts:[
+    '17β-hidroxiesteroide deshidrogenasa y 17α-hidroxilasa.',
+    'Aromatasa y 21-hidroxilasa.',
+    '3β-HSD y 5α-reductasa.',
+    '11β-hidroxilasa y desmolasa.'
+  ],correct:0},
+
+  {id:6,type:'mcq',q:'6. Enzima que convierte testosterona en DHT',opts:[
+    '5α-reductasa.',
+    'Aromatasa.',
+    '17β-HSD.',
+    '11β-hidroxilasa.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Forma biológicamente activa de los andrógenos',opts:[
+    'Testosterona libre y DHT unidas a receptor citoplasmático.',
+    'Solo testosterona conjugada a SHBG.',
+    'DHEA sulfato circulante.',
+    'Androstenediona unida a albúmina.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Lugar de metabolismo y excreción de testosterona',opts:[
+    'Metabolismo hepático y excreción renal como 17-cetosteroides.',
+    'Degradación pulmonar y eliminación intestinal.',
+    'Biotransformación renal y excreción biliar directa.',
+    'Metabolismo pancreático y excreción pulmonar.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. Mecanismo de acción de los andrógenos',opts:[
+    'Se unen a receptores nucleares → modulan transcripción génica.',
+    'Bloquean la GnRH hipotalámica directamente.',
+    'Aumentan la concentración de AMPc en membrana celular.',
+    'Inhiben competitivamente los receptores estrogénicos.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Principales efectos biológicos de los andrógenos',opts:[
+    'Desarrollo genital masculino, espermatogénesis, anabolismo proteico, cierre epifisario, ↑ masa ósea y libido.',
+    'Efecto catabólico, inhibición de eritropoyesis y redistribución grasa feminoide.',
+    'Inducción de foliculogénesis y ↑ HDL plasmático.',
+    'Aumento de TSH y efectos glucocorticoides.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. Andrógenos naturales y sintéticos disponibles',opts:[
+    'Naturales: testosterona; Sintéticos: metiltestosterona, fluoximesterona, undecanoato, cipionato, enantato.',
+    'Naturales: DHEA; Sintéticos: prednisona y dexametasona.',
+    'Naturales: androsterona; Sintéticos: progesterona y noretisterona.',
+    'Naturales: DHT; Sintéticos: estradiol y etinilestradiol.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Vías de administración de testosterona',opts:[
+    'IM, transdérmica, oral (undecanoato), bucal y tópica (gel).',
+    'Solo vía oral con metabolitos activos.',
+    'Intravenosa diaria por pulsos.',
+    'Subcutánea y endovenosa simultáneamente.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Efectos adversos de andrógenos en hombres',opts:[
+    'Priapismo, oligospermia, ginecomastia, retención hídrica, hepatotoxicidad (17-alquilados).',
+    'Anemia, fatiga, aumento de HDL.',
+    'Alopecia reversible y amenorrea.',
+    'Insuficiencia adrenal aguda y nefritis intersticial.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. Efectos adversos de andrógenos en mujeres',opts:[
+    'Virilización (hirsutismo, acné, voz grave, clitoromegalia, alopecia).',
+    'Amenorrea e hipopigmentación cutánea leve.',
+    'Aumento de masa muscular sin cambios menstruales.',
+    'Depresión de médula ósea y astenia.'
+  ],correct:0},
+
+  {id:15,type:'mcq',q:'15. Usos terapéuticos de los andrógenos',opts:[
+    'Hipogonadismo primario/secundario, caquexia, anemia aplásica, osteoporosis, reemplazo hormonal y ciertos cánceres mamarios metastásicos.',
+    'Anticoncepción masculina y terapia antiestrogénica.',
+    'Tratamiento de acné juvenil y SOP.',
+    'Estimulación ovárica en infertilidad femenina.'
+  ],correct:0}
+];
+// === CUESTIONARIO – ESTRÓGENOS Y PROGESTINAS (P6 se practica en el recuadro) ===
+const ESTROGENOS = [
+  {id:1,type:'mcq',q:'1. Estrógenos naturales',opts:[
+    'Estradiol, estrona, estriol.',
+    'Etinilestradiol, mestranol, dietilestilbestrol.',
+    'Tamoxifeno, raloxifeno, toremifeno.',
+    'Anastrozol, letrozol, exemestano.'
+  ],correct:0},
+
+  {id:2,type:'mcq',q:'2. Estrógenos sintéticos',opts:[
+    'Etinilestradiol, mestranol, dietilestilbestrol.',
+    'Estradiol, estrona, estriol.',
+    'Tamoxifeno, raloxifeno, toremifeno.',
+    'Fulvestrant, clomifeno.'
+  ],correct:0},
+
+  {id:3,type:'mcq',q:'3. SERM',opts:[
+    'Tamoxifeno, raloxifeno, toremifeno.',
+    'Fulvestrant, clomifeno.',
+    'Anastrozol, letrozol, exemestano.',
+    'Ulipristal, mifepristona.'
+  ],correct:0},
+
+  // (P6 va en el recuadro interactivo)
+
+  {id:4,type:'mcq',q:'4. Antiestrógenos puros',opts:[
+    'Fulvestrant, clomifeno.',
+    'Tamoxifeno, raloxifeno.',
+    'Anastrozol, letrozol.',
+    'Etinilestradiol, mestranol.'
+  ],correct:0},
+
+  {id:5,type:'mcq',q:'5. Inhibidores de aromatasa',opts:[
+    'Anastrozol, letrozol, exemestano.',
+    'Tamoxifeno, toremifeno.',
+    'Estradiol, estrona.',
+    'Mifepristona, ulipristal.'
+  ],correct:0},
+
+  {id:7,type:'mcq',q:'7. Progestinas 1ª generación',opts:[
+    'Noretisterona, linestrenol.',
+    'Levonorgestrel, norgestrel.',
+    'Desogestrel, gestodeno.',
+    'Ulipristal, mifepristona.'
+  ],correct:0},
+
+  {id:8,type:'mcq',q:'8. Progestinas 2ª/3ª generación',opts:[
+    'Levonorgestrel, norgestrel, desogestrel.',
+    'Noretisterona, linestrenol.',
+    'Estradiol, estriol.',
+    'Tamoxifeno, raloxifeno.'
+  ],correct:0},
+
+  {id:9,type:'mcq',q:'9. SPRM',opts:[
+    'Ulipristal, mifepristona.',
+    'Tamoxifeno, raloxifeno.',
+    'Fulvestrant, clomifeno.',
+    'Anastrozol, letrozol.'
+  ],correct:0},
+
+  {id:10,type:'mcq',q:'10. Usos terapéuticos de estrógenos',opts:[
+    'Anticoncepción, THS menopausia, hipogonadismo femenino.',
+    'Hipertensión severa, hipercalcemia aguda, cetoacidosis.',
+    'EPOC estable, tiroiditis de Hashimoto, hiperuricemia.',
+    'Hipertrofia prostática y depleción androgénica.'
+  ],correct:0},
+
+  {id:11,type:'mcq',q:'11. EA importantes de estrógenos',opts:[
+    'Tromboembolismo, náusea, mastalgia, sangrado uterino.',
+    'Hipoglucemia, tos seca, bradicardia.',
+    'Nefritis intersticial, convulsiones, miopatía severa.',
+    'HipoNa aguda, arritmias ventriculares, pancreatitis.'
+  ],correct:0},
+
+  {id:12,type:'mcq',q:'12. Contraindicaciones de estrógenos',opts:[
+    'TEV activo, cáncer de mama/estrogenodependiente, sangrado vaginal no diagnosticado.',
+    'Asma leve, rinitis estacional, dermatitis atópica.',
+    'Migraña sin aura en adolescencia tardía.',
+    'Miopía y estrabismo.'
+  ],correct:0},
+
+  {id:13,type:'mcq',q:'13. Usos terapéuticos de progestinas',opts:[
+    'Anticoncepción, sangrado uterino disfuncional, soporte fase lútea.',
+    'Hipertiroidismo, hipocalcemia, anemia hemolítica.',
+    'Asma, EPOC, rinitis alérgica.',
+    'Dislipidemia aislada.'
+  ],correct:0},
+
+  {id:14,type:'mcq',q:'14. EA de progestinas',opts:[
+    'Irregularidad menstrual, ↑ apetito/peso, acné, cambios de ánimo.',
+    'Broncoespasmo severo, crisis gotosa, hipocalcemia.',
+    'Nefrolitiasis, anemia aplásica, hepatonecrosis.',
+    'Prolongación QTc masiva y torsades.'
+  ],correct:0}
+];
+const RECAMBIO_OSEO = [
+  // 1
+  {id:1,type:'mcq',q:'1. Regulación de la homeostasis de calcio y fosfato',
+    opts:[
+      'Predomina la PTH: ↑ resorción ósea (activa osteoclastos), ↑ reabsorción renal de Ca y ↓ reabsorción de fosfato; además ↑ 1α-hidroxilasa → ↑ calcitriol, que ↑ absorción intestinal de Ca/P; la calcitonina participa como modulador.',
+      'Predomina la calcitonina: ↓ resorción ósea y ↑ reabsorción renal de fosfato; el calcitriol solo inhibe la absorción intestinal.',
+      'Se regula solo por vitamina D: ↑ reabsorción de fosfato y ↓ reabsorción de Ca en riñón; la PTH no interviene.',
+      'Depende únicamente del intestino: ↑ absorción de Ca y P sin participación renal u ósea.'
+    ],
+    correct:0
+  },
+
+  // 2
+ // 2
+{ id:2, type:'mcq', asHTML:true, q: `
+  <div style="line-height:1.4">
+    <strong>2. Paratohormona (PTH):</strong> relación entre sus funciones fisiológicas y mecanismos de acción.
+    <br><em>Consulta el siguiente cuadro y elige la afirmación que mejor lo resume:</em>
+    <table style="border-collapse:collapse;width:100%;margin-top:10px;text-align:left;font-size:14px">
+      <thead style="background:rgba(255,255,255,.08)">
+        <tr>
+          <th style="padding:6px;border:1px solid rgba(255,255,255,.15)">Funciones fisiológicas</th>
+          <th style="padding:6px;border:1px solid rgba(255,255,255,.15)">Mecanismo de acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Aumenta la resorción ósea</td>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Activa osteoclastos</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Aumenta la reabsorción renal de calcio</td>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Incrementa la actividad de transportadores en túbulos renales</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Estimula la producción de calcitriol</td>
+          <td style="padding:6px;border:1px solid rgba(255,255,255,.15)">Activa la enzima 1α-hidroxilasa en riñones</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`,
+  opts: [
+    'Aumenta la resorción ósea, la reabsorción renal de calcio y la síntesis de calcitriol, mediante activación de osteoclastos, transportadores renales y 1α-hidroxilasa.',
+    'Estimula la calcitonina y bloquea la actividad osteoclástica, reduciendo la liberación de calcio óseo.',
+    'Disminuye la resorción ósea e inhibe la síntesis de calcitriol, reduciendo la calcemia.',
+    'Actúa solo sobre el intestino incrementando la absorción pasiva de calcio sin efecto renal ni óseo.'
+  ],
+  correct: 0
+},
+
+  // 3
+  {id:3,type:'mcq',q:'3. Calcitriol – funciones y mecanismo',
+    opts:[
+      '↑ absorción intestinal de Ca y P, favorece resorción ósea y ↓ eliminación renal; se une al VDR nuclear y regula transcripción (p. ej., calbindina).',
+      '↓ absorción intestinal de Ca/P; actúa en receptores de membrana tipo tirosina-quinasa.',
+      '↑ excreción renal de Ca/P e inhibe resorción ósea; se une a receptores citosólicos de catecolaminas.',
+      'No participa en homeostasis mineral; solo estimula médula ósea.'
+    ],
+    correct:0
+  },
+
+  // 4
+  {id:4,type:'mcq',q:'4. Causas de trastornos del metabolismo de Ca y P',
+    opts:[
+      'Desequilibrios hormonales, deficiencias nutricionales y enfermedades renales, intestinales u óseas.',
+      'Exceso de hierro dietético únicamente.',
+      'Hipervitaminosis C aislada.',
+      'Infecciones virales autolimitadas.'
+    ],
+    correct:0
+  },
+
+  // 5
+  {id:5,type:'mcq',q:'5. Trastornos de la vitamina D',
+    opts:[
+      'Deficiencia: raquitismo/osteomalacia; Exceso: hipercalcemia y calcificaciones en tejidos blandos.',
+      'Deficiencia: hipercalcemia; Exceso: raquitismo.',
+      'Deficiencia: osteopetrosis; Exceso: hipofosfatemia severa sin hipercalcemia.',
+      'Deficiencia: gota; Exceso: hiponatremia.'
+    ],
+    correct:0
+  },
+
+  // 6
+  {id:6,type:'mcq',q:'6. Tratamiento de hipercalcemia e hipocalcemia',
+    opts:[
+      'Hipercalcemia: SSN IV + diurético de asa; Hipocalcemia: calcio (VO/IV) + vitamina D si hay déficit.',
+      'Hipercalcemia: tiazidas; Hipocalcemia: restricción de calcio.',
+      'Hipercalcemia: solo reposo; Hipocalcemia: insulina IV.',
+      'Hipercalcemia: bicarbonato IV; Hipocalcemia: furosemida crónica.'
+    ],
+    correct:0
+  },
+
+  // 7
+  {id:7,type:'mcq',q:'7. Usos terapéuticos de la vitamina D',
+    opts:[
+      'Deficiencia de calcio, osteoporosis, raquitismo, osteomalacia y algunas nefropatías.',
+      'Hipercalcemia aguda y enfermedad de Paget.',
+      'Hipertiroidismo y feocromocitoma.',
+      'Profilaxis de gota y hiperuricemia.'
+    ],
+    correct:0
+  },
+
+  // 8
+  {id:8,type:'mcq',q:'8. Efectos adversos de la vitamina D (terapia)',
+    opts:[
+      'Hipercalcemia, náuseas/vómitos, debilidad y calcificaciones renales o en tejidos blandos.',
+      'Hipoglucemia, broncoespasmo y leucopenia.',
+      'Hiponatremia, pancitopenia y neuropatía óptica.',
+      'Depresión respiratoria y acidosis metabólica.'
+    ],
+    correct:0
+  },
+
+  // 9
+  {id:9,type:'mcq',q:'9. Calcitonina – uso diagnóstico y terapéutico',
+    opts:[
+      'Dx/seguimiento del carcinoma medular de tiroides y evaluación de hipercalcemia; Tx: hipercalcemia, enfermedad de Paget y osteoporosis.',
+      'Dx: hipotiroidismo primario; Tx: hipocalcemia.',
+      'Dx: deficiencia de vitamina D; Tx: raquitismo exclusivamente.',
+      'Dx: insuficiencia renal; Tx: hiperfosfatemia aislada.'
+    ],
+    correct:0
+  },
+
+  // 10
+  {id:10,type:'mcq',q:'10. Mecanismo de acción de los bifosfonatos',
+    opts:[
+      'Inhiben osteoclastos → ↓ resorción ósea y pérdida de masa ósea.',
+      'Estimulan osteoclastos → remodelado acelerado.',
+      'Bloquean VDR → ↓ absorción intestinal de Ca.',
+      'Activan PTH → ↑ resorción ósea.'
+    ],
+    correct:0
+  },
+
+  // 11
+  {id:11,type:'mcq',q:'11. Bifosfonatos – usos y efectos adversos',
+    opts:[
+      'Usos: osteoporosis, Paget, hipercalcemia maligna. EA: GI, esofagitis, osteonecrosis mandibular.',
+      'Usos: hipotiroidismo y Addison. EA: hipoglucemia y broncoespasmo.',
+      'Usos: anemia aplásica. EA: agranulocitosis y pancreatitis.',
+      'Usos: gota. EA: hiperuricemia y nefrolitiasis.'
+    ],
+    correct:0
+  },
+
+  // 12
+  {id:12,type:'mcq',q:'12. Hormona paratiroidea (teriparatida) – usos y EA',
+    opts:[
+      'Uso: osteoporosis severa. EA: hipercalcemia y, a veces, dolor óseo o muscular.',
+      'Uso: hipercalcemia aguda. EA: hipocalcemia y convulsiones.',
+      'Uso: osteopetrosis. EA: pancitopenia.',
+      'Uso: anemia ferropénica. EA: hipotensión severa.'
+    ],
+    correct:0
+  },
+
+  // 13
+  {id:13,type:'mcq',q:'13. Cinacalcet – usos terapéuticos',
+    opts:[
+      'Hiperparatiroidismo secundario en ERC y carcinoma paratiroideo.',
+      'Hipotiroidismo y mixedema.',
+      'Osteomalacia nutricional no complicada.',
+      'Hiperprolactinemia resistente.'
+    ],
+    correct:0
+  },
+
+  // 14
+  {id:14,type:'mcq',q:'14. Fluoruro – usos terapéuticos',
+    opts:[
+      'Prevención de caries dentales y, en ciertos casos, tratamiento de osteoporosis.',
+      'Tratamiento de hipercalcemia aguda.',
+      'Corrección de hipokalemia severa.',
+      'Profilaxis de tromboembolismo.'
+    ],
+    correct:0
+  },
+
+  // 15
+  {id:15,type:'mcq',q:'15. Objetivo terapéutico en osteoporosis y fármacos utilizados',
+    opts:[
+      'Prevenir fracturas aumentando masa ósea; fármacos: bifosfonatos, teriparatida, calcitonina y SERM.',
+      'Normalizar exclusivamente la calcemia; fármacos: tiazidas.',
+      'Disminuir fosfatemia en todos los casos; fármacos: resinas fijadoras.',
+      'Aumentar la resorción ósea; fármacos: PTH a dosis altas continuas.'
+    ],
+    correct:0
+  }
+];
+const HEMATOPOYESIS = [
+  {id:1,type:'mcq',q:'1. ¿Qué es la eritropoyetina?',
+    opts:[
+      'Regulador principal de la proliferación de progenitores eritroides (CFU-E).',
+      'Hormona tiroidea que estimula producción de eritrocitos.',
+      'Proteína hepática que activa linfocitos B.',
+      'Factor de crecimiento de plaquetas derivado de megacariocitos.'
+    ],
+    correct:0
+  },
+
+  {id:2,type:'mcq',q:'2. Preparaciones recombinantes de eritropoyetina humana:',
+    opts:[
+      'Epoetina alfa, epoetina beta, epoetina omega, epoetina zeta.',
+      'Eritropoyetina gamma, delta, zeta, lambda.',
+      'Epoetina alfa, interferón, IL-2, trombopoyetina.',
+      'Epoetina beta, filgrastim, lenograstim, darbepoetina.'
+    ],
+    correct:0
+  },
+
+  {id:3,type:'mcq',q:'3. Usos terapéuticos y efectos adversos de la eritropoyetina:',
+    opts:[
+      'Usos: anemias por cirugía, quimioterapia, SIDA, prematuridad. EA: hipertensión, convulsiones, cefalea, síntomas gripales.',
+      'Usos: hipoglucemia, hiperlipidemia, fiebre. EA: anemia y náuseas.',
+      'Usos: leucemia y hemofilia. EA: hipocalcemia, taquicardia, anemia.',
+      'Usos: fiebre reumática. EA: hepatotoxicidad y agranulocitosis.'
+    ],
+    correct:0
+  },
+
+  {id:4,type:'mcq',q:'4. ¿Qué son los factores de crecimiento mieloides?',
+    opts:[
+      'Glucoproteínas que estimulan proliferación y diferenciación de células mieloides.',
+      'Hormonas tiroideas que regulan metabolismo celular.',
+      'Vitaminas hidrosolubles que promueven mitosis linfocitaria.',
+      'Proteasas que degradan fibrina en médula ósea.'
+    ],
+    correct:0
+  },
+
+  {id:5,type:'mcq',q:'5. ¿Qué es la trombopoyetina?',
+    opts:[
+      'Glucoproteína hepática y medular que regula producción de plaquetas.',
+      'Hormona pancreática que inhibe glucagón.',
+      'Citocina intestinal que estimula eritropoyesis.',
+      'Proteína renal que controla síntesis de eritrocitos.'
+    ],
+    correct:0
+  },
+
+  {id:6,type:'mcq',q:'6. Principios terapéuticos en deficiencia de hierro:',
+    opts:[
+      'Dependen de la gravedad, tolerancia y absorción; se evalúa respuesta por reticulocitos y aumento de Hb.',
+      'Solo depende del apetito y dieta del paciente.',
+      'Basado en administración intermitente de folato.',
+      'Se ajusta por niveles de calcio sérico exclusivamente.'
+    ],
+    correct:0
+  },
+
+  {id:7,type:'mcq',q:'7. Dosis promedio y duración del tratamiento con hierro oral:',
+    opts:[
+      '200 mg/día (2-3 mg/kg) en 3 dosis; duración 3–6 meses.',
+      '500 mg/día (10 mg/kg) única dosis; duración 1 semana.',
+      '100 mg/día (1 mg/kg) cada 48 h; duración 12 meses.',
+      '50 mg/día (0.5 mg/kg) dividida en 2 dosis; duración 15 días.'
+    ],
+    correct:0
+  },
+
+  {id:8,type:'mcq',q:'8. Efectos adversos del hierro por vía oral:',
+    opts:[
+      'Ardor epigástrico, náuseas, malestar gástrico, diarrea o estreñimiento.',
+      'Hipotensión, taquicardia, rash cutáneo.',
+      'Mialgias, cefalea, somnolencia.',
+      'Hepatotoxicidad, visión borrosa, temblores.'
+    ],
+    correct:0
+  },
+
+  {id:9,type:'mcq',q:'9. Indicaciones y presentaciones del hierro parenteral:',
+    opts:[
+      'Indicaciones: malabsorción, intolerancia oral, soporte parenteral, uso con EPO. Formas: dextrano férrico, gluconato, sacarosa, carboximaltosa.',
+      'Indicaciones: anemia leve y profilaxis prenatal. Formas: sulfato y lactato férrico.',
+      'Indicaciones: leucemia y linfoma. Formas: carbón coloidal.',
+      'Indicaciones: déficit de zinc. Formas: gluconato y sulfato de zinc.'
+    ],
+    correct:0
+  },
+
+  {id:10,type:'mcq',q:'10. Función del ácido fólico y vitamina B12:',
+    opts:[
+      'Síntesis de ADN, maduración eritroide, metabolismo de homocisteína y función nerviosa.',
+      'Estimular secreción gástrica y síntesis de proteínas plasmáticas.',
+      'Regular glucemia e insulina.',
+      'Inhibir resorción ósea y absorción de calcio.'
+    ],
+    correct:0
+  },
+
+  {id:11,type:'mcq',q:'11. Principios del uso de vitamina B12:',
+    opts:[
+      'Debe usarse profilácticamente ante riesgo de déficit y evaluarse cada 6–12 meses.',
+      'Administrar siempre junto a hierro, sin diagnóstico previo.',
+      'No requiere control a largo plazo.',
+      'Solo indicada en niños sin estudios previos.'
+    ],
+    correct:0
+  },
+
+  {id:12,type:'mcq',q:'12. Indicaciones terapéuticas de la vitamina B12:',
+    opts:[
+      'Anemia perniciosa, embarazo, gastrectomía, esprue y trastornos pancreáticos.',
+      'Hipocalcemia, hipotiroidismo y diabetes.',
+      'Osteoporosis, artritis y deficiencia de vitamina D.',
+      'Hepatitis, nefritis y hipercolesterolemia.'
+    ],
+    correct:0
+  },
+
+  {id:13,type:'mcq',q:'13. Principios generales para el uso del ácido fólico:',
+    opts:[
+      'Requiere evaluación de causa subyacente y descartar déficit de B12 antes de suplementar.',
+      'Usarse solo si hay déficit de hierro confirmado.',
+      'Administrarse junto a tiazidas siempre.',
+      'Evitarlo en embarazo por riesgo teratogénico.'
+    ],
+    correct:0
+  },
+
+  {id:14,type:'mcq',q:'14. Problemas por deficiencia de ácido fólico:',
+    opts:[
+      'Eritropoyesis megaloblástica, trastornos psiquiátricos y defectos del tubo neural.',
+      'Anemia hemolítica y retinopatía.',
+      'Síndrome nefrótico y colestasis.',
+      'Hipertiroidismo y taquiarritmia.'
+    ],
+    correct:0
+  },
+
+  {id:15,type:'mcq',q:'15. Presentaciones farmacológicas de hierro, ácido fólico y B12:',
+    opts:[
+      'Hierro oral: sulfato ferroso 200 mg/día; Parenteral: dextrano, gluconato, sacarosa, carboximaltosa; Ácido fólico: tabletas 5 mg/mL; B12: 100 µg IM cada 4 semanas.',
+      'Solo hierro oral y ácido fólico en cápsulas sin dosis definidas.',
+      'Hierro oral 50 mg/día; ácido fólico 0.5 mg; B12 10 µg IM semanal.',
+      'Combinaciones multivitamínicas sin hierro parenteral.'
+    ],
+    correct:0
+  }
+];
 
 // === Utilidades
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -269,10 +1976,14 @@ function render(){
   QUESTIONS.forEach((q)=>{
     const card=document.createElement('div');
     card.className='card q';
-    const title=document.createElement('div');
-    title.className='q-title';
-    title.textContent=q.q;
-    card.appendChild(title);
+   const title = document.createElement('div');
+title.className = 'q-title';
+if (q.asHTML) {
+  title.innerHTML = q.q;  // permite HTML (para tablas, fórmulas, etc.)
+} else {
+  title.textContent = q.q; // comportamiento normal
+}
+card.appendChild(title);
 
     if(q.type==='mcq'){
       const optsEl=document.createElement('div');
@@ -374,6 +2085,26 @@ document.getElementById('reset').addEventListener('click',()=>{
   document.getElementById('summary').innerHTML='';
   window.scrollTo({top:0,behavior:'smooth'});
 });
+// ======= Cambio de cuestionario por menú =======
+const titleEl = document.getElementById('title');
+
+function setModule(nombre, data){
+  const clone = JSON.parse(JSON.stringify(data));
+  QUESTIONS.splice(0, QUESTIONS.length, ...clone);
+  titleEl.textContent = `Cuestionario Interactivo – Fármacos ${nombre}`;
+  badge.textContent = `${QUESTIONS.length} preguntas`;
+  render();
+    toggleMatcherFor(data);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('btnAntivirales').addEventListener('click', ()=>{
+  setModule('Antivirales', ANTIVIRALES);
+});
+
+document.getElementById('btnAntirretrovirales').addEventListener('click', ()=>{
+  setModule('Antirretrovirales', ANTIRRETROVIRALES);
+});
 
 // Mostrar respuestas
 document.getElementById('reveal').addEventListener('click',()=>{
@@ -387,6 +2118,44 @@ document.getElementById('reveal').addEventListener('click',()=>{
     });
   });
 });
+document.getElementById('btnAntimicoticos').addEventListener('click', ()=>{
+  setModule('Antimicóticos', ANTIMICOTICOS);
+});
+ document.getElementById('btnEndocrino').addEventListener('click', ()=>{
+  setModule('Endocrino', ENDOCRINO);
+});
+// === LISTENERS DE LOS SIGUIENTES MÓDULOS ===
+
+// ACTH
+document.getElementById('btnACTH').addEventListener('click', ()=>{
+  setModule('ACTH', ACTH);
+});
+
+// DIABETES
+document.getElementById('btnDiabetes').addEventListener('click', ()=>{
+  setModule('Diabetes', DIABETES);
+});
+
+// ANDRÓGENOS
+document.getElementById('btnandrogenos').addEventListener('click', ()=>{
+  setModule('Andrógenos', ANDROGENOS);
+});
+
+// ESTRÓGENOS
+document.getElementById('btnEstrogenos').addEventListener('click', ()=>{
+  setModule('Estrógenos y Progestinas', ESTROGENOS);
+});
+
+// RECAMBIO ÓSEO
+document.getElementById('btnRecambioOseo').addEventListener('click', ()=>{
+  setModule('Recambio Óseo', RECAMBIO_OSEO);
+});
+
+// HEMATOPOYESIS
+document.getElementById('btnHematopoyesis').addEventListener('click', ()=>{
+  setModule('Hematopoyesis', HEMATOPOYESIS);
+});
+
 </script>
 </body>
 </html>
